@@ -23,7 +23,6 @@ public class Perfil extends AppCompatActivity {
         finish();
     }
 
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

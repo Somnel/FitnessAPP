@@ -1,43 +1,180 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+
+    android:layout_height="match_parent"
+    android:layout_width="match_parent" >
+
+<LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Cadastro">
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="CADASTRO"
+        android:gravity="center"
+        android:layout_marginVertical="10dp"
+        android:textSize="25sp"
+
+        />
 
     <LinearLayout
+        android:layout_height="0dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_margin="16dp"
+        android:layout_weight="1"
         android:orientation="vertical"
-        android:gravity="center_vertical"
-        android:layout_margin="16dp">
+        tools:context=".Cadastro">
 
-        <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/cadastro_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
 
-        <LinearLayout
+        <EditText
+            android:id="@+id/cadastroNome"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center">
-            <Button
-                android:id="@+id/btn_anterior"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Anterior"
-                android:layout_gravity="start" />
+            android:ems="10"
+            android:inputType="text"
+            android:hint="Nome" />
 
-            <Button
-                android:id="@+id/btn_proxima"
-                android:layout_width="wrap_content"
+        <EditText
+            android:id="@+id/cadastroDatanasc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="date"
+            android:hint="Data de Nascimento"/>
+
+        <EditText
+            android:id="@+id/cadastroEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textEmailAddress"
+            android:hint="Email"/>
+
+        <EditText
+            android:id="@+id/cadastroSenha"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Senha"/>
+
+        <EditText
+            android:id="@+id/cadastroSenhaConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:inputType="textPassword"
+            android:hint="Confime a Senha"/>
+
+        <RadioGroup
+            android:id="@+id/cadastroSexo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/cadastroMasc"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:text="Próxima" />
-        </LinearLayout>
+                android:text="Homem"
+                android:layout_weight="1"/>
+
+            <RadioButton
+                android:id="@+id/cadastroFem"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="Mulher"
+                android:layout_weight="1"/>
+
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textFreqExerc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="23dp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="Frequência de Exercicios" />
+
+        <SeekBar
+            android:id="@+id/sbarFreqExerc"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="4"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/textHelperFreqExerc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20dp"
+            android:layout_marginVertical="10dp"
+
+            android:text="..." />
+
+        <TextView
+            android:id="@+id/textDisponibilidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="23sp"
+            android:gravity="center"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="Disponibilidade" />
+
+        <SeekBar
+            android:id="@+id/sbarDisponibilidade"
+            style="@style/Widget.AppCompat.SeekBar.Discrete"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="4"
+            android:progress="0" />
+
+        <TextView
+            android:id="@+id/textHelperDisponibilidade"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:layout_marginVertical="10dp"
+
+            android:text="..." />
+
+
+        <include
+            layout="@layout/cadastro_addspinner"
+            android:id="@+id/cadastroExercsRealizados"/>
+
+        <include
+            layout="@layout/cadastro_addspinner"
+            android:id="@+id/cadastroFoco"/>
+
+        <include
+            layout="@layout/cadastro_addspinner"
+            android:id="@+id/cadastroObjetivo"/>
+
 
     </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginVertical="20dp">
+
+        <Button
+            android:id="@+id/cadastroBtn"
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:text="Cadastrar" />
+    </LinearLayout>
+
+</LinearLayout>
+</androidx.core.widget.NestedScrollView>

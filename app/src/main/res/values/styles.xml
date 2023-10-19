@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="editText" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">300dp</item>
         <item name="android:layout_height">60dp</item>
@@ -10,6 +11,15 @@
     <style name="clickableText">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">30dp</item>
+    </style>
+
+
+    <!-- [Cadastro.class] -->
+    <style name="addspinner">
+        <item name="android:background">@drawable/addspinner_button</item>
+    </style>
+    <style name="addspinnerField">
+        <item name="android:background">@drawable/addspinner_field</item>
     </style>
 
     <!-- [Principal.class] -->

@@ -27,10 +27,17 @@ public class sql extends SQLiteOpenHelper {
                 +", exerc_nome VARCHAR(40)  NOT NULL"
                 +", exerc_illu VARCHAR(100)  NOT NULL" // Link da illustração
                 +", exerc_desc TEXT  NOT NULL" // To-do -> Definir na interface limite de caracteres
-                +", exerc_tipo CHAR(1)  NOT NULL" // Tipo 0 : fisico 2 : cognitivo
+                +", exerc_tipo CHAR(1)  NOT NULL" // Tipo 0 : fisico 1 : cognitivo
                 +", exerc_duracao TIME  NOT NULL"
                 +", exerc_intensidade CHAR(1)  NOT NULL" // 0 : Baixa 1 : Média 2 : Alta
                 +", exerc_limite INTEGER NOT NULL DEFAULT 0)");
+
+        // Tabela de Classificação - Exercicio
+        db.execSQL("CREATE TABLE IF NOT EXISTS tbExercClassificacao("
+                +"exercclassIDExerc INTEGER NOT NULL"
+                +", exercClassificao VARCHAR(20) NOT NULL"
+                +", PRIMARY KEY(exercclassIDExerc, exercClassificao)"
+                +", FOREIGN KEY(exercclassIDExerc) REFERENCES tbExercicio(idExercicio))");
 
         // Tabela de Grupo Muscular - Exericio
         db.execSQL("CREATE TABLE IF NOT EXISTS tbExercGPMuscular("
@@ -48,12 +55,9 @@ public class sql extends SQLiteOpenHelper {
                 +", usu_email VARCHAR(100) NOT NULL"
                 +", usu_datanasc DATE  NOT NULL"
                 +", usu_sexo CHAR(1) NOT NULL"
-                +", usu_peso INTEGER NOT NULL" // em cm
-                +", usu_altura INTEGER NOT NULL"
-                +", usu_condicao CHAR(1)  NOT NULL"
-                +", usu_initDisponivel TIME NOT NULL"
-                +", usu_endDisponivel TIME NOT NULL"
-                +", usu_foco INTEGER" // NULL TAVA DANDO ERRO
+                +", usu_condicao CHAR(1)  NOT NULL" // 0 > 2 | 3 > 5 | 6 > 8
+                +", usu_tempoDisponivel TIME NOT NULL"
+                +", usu_foco INTEGER"
                 + ", FOREIGN KEY(usu_foco) REFERENCES tbGrupoMuscular(idGrupoMusc))");
 
         // Tabela de Histórico de Exercicios

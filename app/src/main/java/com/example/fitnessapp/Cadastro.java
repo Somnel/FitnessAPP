@@ -1,33 +1,78 @@
 package com.example.fitnessapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.SeekBar;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fitnessapp.MainActivity;
-import com.example.fitnessapp.R;
+import com.example.fitnessapp.Cadastro_Classes.CadastroInterface;
+import com.example.fitnessapp.Cadastro_Classes.Cadastro_RecyclerViewAdapter;
+import com.example.fitnessapp.db.classes.Usuario;
 import com.example.fitnessapp.db.classes.UsuarioSession;
-import com.example.fitnessapp.fragmentos.*;
 
-public class Cadastro extends AppCompatActivity {
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
-    private ViewPager2 stepView;
-    private StepperPagerAdapter pagerAdapter;
-    private Button next;
-    private Button prev;
+public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
-    private int step;
+    private TextView cadastroDisponibilidadeText;
+    private TextView cadastroFreqExerciciosText;
 
+
+    private EditText cadastroNome;
+    private EditText cadastroDatanasc;
+    private EditText cadastroEmail;
+    private EditText cadastroSenha;
+    private RadioGroup cadastroSexo;
+    private SeekBar cadastroFreqExercicios;
+    private SeekBar cadastroDisponibilidade;
+
+    // Spinners
+    // Spinners.Exercicios_Realizados
+    private Spinner cadastroExercicioRealizado;
+    private Button cadastroExercicioRealizadoBtn;
+    private ArrayAdapter<String> cadastroExercicioRealizadoArray;
+    private RecyclerView cadastroExercicioRealizadoView;
+    private Cadastro_RecyclerViewAdapter cadastroExercicioRealizadoViewAdapter;
+
+    // Spinners.Foco_Treino
+    private Spinner cadastroFocoTreino;
+    private ArrayAdapter<String> cadastroFocoTreinoArray;
+    private Button cadastroFocoTreinoBtn;
+
+
+    // Spinners.Objetivos
+    private Spinner cadastroObjetivo;
+    private ArrayAdapter<String> cadastroObjetivoArray;
+    private Button cadastroObjetivoBtn;
+
+    // Spinners.Lista
+    private ArrayList<String> cadastroExercicioRealizadoItens = new ArrayList<>();
+    private ArrayList<String> cadastroFocoTreinoItens = new ArrayList<>();
+    private ArrayList<String> cadastroObjetivoItens = new ArrayList<>();
+
+    //
+
+    private Button btnCadastrar;
 
     @Override
     public void onBackPressed() {
@@ -49,75 +94,182 @@ public class Cadastro extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        stepView.setAdapter(pagerAdapter);
-        updateView();
 
-        // Botão de Anterior
-        prev.setOnClickListener(new View.OnClickListener(){
+        cadastroExercicioRealizadoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(prev.isEnabled()) {
-                    step--;
-                    updateView();
+            public void onClick(View v) {
+                String itemSelecionado = cadastroExercicioRealizado.getSelectedItem().toString();
+
+                if(!TextUtils.isEmpty(itemSelecionado)) {
+                    cadastroExercicioRealizadoItens.add(itemSelecionado);
+                    cadastroExercicioRealizadoArray.remove(itemSelecionado);
+                    cadastroExercicioRealizadoArray.notifyDataSetChanged();
                 }
             }
         });
 
-        // Botão de Próximo
-        next.setOnClickListener(new View.OnClickListener() {
+        cadastroFocoTreinoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(next.isEnabled()) {
-                    step++;
-                    updateView();
+            public void onClick(View v) {
+                String itemSelecionado = cadastroFocoTreino.getSelectedItem().toString();
+
+                if(!TextUtils.isEmpty(itemSelecionado)) {
+                    cadastroFocoTreinoItens.add(itemSelecionado);
+                    cadastroFocoTreinoArray.remove(itemSelecionado);
+                    cadastroFocoTreinoArray.notifyDataSetChanged(); // Atualiza o Spinner
                 }
             }
         });
+
+
+        cadastroObjetivoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String itemSelecionado = cadastroObjetivo.getSelectedItem().toString();
+
+                if(!TextUtils.isEmpty(itemSelecionado)) {
+                    cadastroObjetivoItens.add(itemSelecionado);
+                    cadastroObjetivoArray.remove(itemSelecionado);
+                    cadastroObjetivoArray.notifyDataSetChanged(); // Atualiza o Spinner
+                }
+            }
+        });
+
+
+
+
+
+
+
+
+        btnCadastrar.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
+            @Override
+            public void onClick(View v) {
+                cadastrar();
+            }
+        });
+
+        cadastroFreqExercicios.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                if(progress >= 4) cadastroFreqExerciciosText.setText(R.string.condicaoAlta);
+                else if(progress >= 2) cadastroFreqExerciciosText.setText(R.string.condicaoModerado);
+                else cadastroFreqExerciciosText.setText(R.string.condicaoLeve);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        cadastroDisponibilidade.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                cadastroDisponibilidadeText.setText(progress + ":" + "00");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+
     }
 
+    @SuppressLint("ResourceType")
     private void init() {
-        stepView = findViewById(R.id.cadastro_viewpager);
-        pagerAdapter = new StepperPagerAdapter(getSupportFragmentManager(), getLifecycle());
-        next = findViewById(R.id.btn_proxima);
-        prev = findViewById(R.id.btn_anterior);
-        step = 1;
+        cadastroNome = findViewById(R.id.cadastroNome);
+        cadastroDatanasc = findViewById(R.id.cadastroDatanasc);
+        cadastroEmail = findViewById(R.id.cadastroEmail);
+        cadastroSenha = findViewById(R.id.cadastroSenha);
+        cadastroSexo = findViewById(R.id.cadastroSexo);
+        cadastroFreqExercicios = findViewById(R.id.sbarFreqExerc);
+        cadastroDisponibilidade = findViewById(R.id.sbarDisponibilidade);
+
+        btnCadastrar = findViewById(R.id.cadastroBtn);
+
+        // Spinners
+        LinearLayout addSpinner_exercRealizado = findViewById(R.id.cadastroExercsRealizados);
+        LinearLayout addSpinner_foco = findViewById(R.id.cadastroFoco);
+        LinearLayout addSpinner_objetivo = findViewById(R.id.cadastroObjetivo);
+
+        cadastroExercicioRealizado = addSpinner_exercRealizado.findViewById(R.id.addspinnerID);
+        cadastroExercicioRealizadoBtn = addSpinner_exercRealizado.findViewById(R.id.btnAddspinner);
+        cadastroExercicioRealizadoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, R.array.ExercRealizado);
+        cadastroExercicioRealizadoView = addSpinner_exercRealizado.findViewById(R.id.viewAddspinner);
+        cadastroExercicioRealizadoViewAdapter = new Cadastro_RecyclerViewAdapter(this, cadastroExercicioRealizadoArray, this);
+        cadastroExercicioRealizadoView.setAdapter(cadastroExercicioRealizadoViewAdapter);
+        cadastroExercicioRealizadoView.setLayoutManager(new LinearLayoutManager(this));
+
+        cadastroFocoTreino = addSpinner_foco.findViewById(R.id.addspinnerID);
+        cadastroFocoTreinoBtn = addSpinner_foco.findViewById(R.id.btnAddspinner);
+        cadastroObjetivoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, R.array.FocoTreino);
+
+        cadastroObjetivo = addSpinner_objetivo.findViewById(R.id.addspinnerID);
+        cadastroObjetivoBtn = addSpinner_objetivo.findViewById(R.id.btnAddspinner);
+        cadastroObjetivoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, R.array.ObjTreino);
+
+        // Spinners.Adapters
+        cadastroExercicioRealizadoArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        cadastroExercicioRealizado.setAdapter(cadastroExercicioRealizadoArray);
+
+
+        //
+        cadastroDisponibilidadeText = findViewById(R.id.textHelperDisponibilidade);
+        cadastroFreqExerciciosText = findViewById(R.id.textHelperFreqExerc);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void cadastrar() {
 
-    // Stepper
-    public void updateView() {
-        // Prev
-        if(step <= 1) prev.setEnabled(false);
-        else prev.setEnabled(true);
+        if(!UsuarioSession.getInstance(this).isEmailFree(cadastroEmail.getText().toString())) {
+            Toast.makeText(this, "Email já cadastrado", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        // Next
-        if(step >= 3) next.setEnabled(false);
-        else next.setEnabled(true);
+        EditText confirm = findViewById(R.id.cadastroSenhaConfirm);
+        if(!cadastroSenha.getText().toString().equals(confirm.getText().toString())) {
+            Toast.makeText(this, "Senha Errada", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        stepView.setCurrentItem(step - 1);
+        try {
+            UsuarioSession usuS = UsuarioSession.getInstance(this);
+            DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss");
+
+            Usuario usuario = new Usuario();
+            usuario.setNome(cadastroNome.getText().toString());
+            usuario.setEmail(cadastroEmail.getText().toString());
+            usuario.setDatanasc(LocalDate.parse(cadastroDatanasc.getText().toString()));
+            usuario.setFoco(cadastroFocoTreino.getSelectedItem().toString());
+            usuario.setSexo(cadastroSexo.getCheckedRadioButtonId() == R.id.cadastroMasc ? 'M' : 'F');
+            usuario.setCondicao(cadastroFreqExerciciosText.getText().toString());
+            usuario.setDisponibilidade(LocalTime.parse(cadastroDisponibilidadeText.getText().toString(), timeformat));
+
+            Log.d("Localtime", usuario.getDisponibilidade().toString());
+            usuS.cadastrar(usuario, cadastroSenha.getText().toString());
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private class StepperPagerAdapter extends FragmentStateAdapter {
-        StepperPagerAdapter(FragmentManager fragmentManager, Lifecycle lifecycle) {
-            super(fragmentManager, lifecycle);
-        }
-
-        @NonNull
-        @Override
-        public Fragment createFragment(int position) {
-            switch (position) {
-                case 0:
-                    return new cadastroFragments.Pagina1Fragment();
-                case 1:
-                    return new cadastroFragments.Pagina2Fragment();
-                case 2:
-                    return new cadastroFragments.Pagina3Fragment();
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public int getItemCount() { return 3; }
+    @Override
+    public void removeItemExercRealizado(int position) {
+        cadastroExercicioRealizadoArray.remove(cadastroExercicioRealizadoArray.getItem(position));
+        cadastroExercicioRealizadoViewAdapter.notifyItemChanged(position);
     }
 }

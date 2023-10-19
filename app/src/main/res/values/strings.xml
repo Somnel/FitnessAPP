@@ -4,4 +4,7 @@
     <string name="alertaDeslogarTitle">Sair do aplicativo</string>
     <string name="alertaDeslogarPositive">SIM</string>
     <string name="alertaDeslogarNegative">NÃO</string>
+    <string name="condicaoLeve">Sedentário</string>
+    <string name="condicaoModerado">Praticante</string>
+    <string name="condicaoAlta">Expert</string>
 </resources>

@@ -10,11 +10,9 @@ public class Usuario {
     private String nome;
     private String email;
     private LocalDate datanasc;
-    private String sexo;
-    private int altura; // Em cm
-    private double peso;
+    private char sexo;
     private String condicao;
-    private LocalTime[] disponibilidade = new LocalTime[2];
+    private LocalTime disponibilidade;
     private String foco;
 
     public Usuario() {}
@@ -51,20 +49,12 @@ public class Usuario {
         this.datanasc = datanasc;
     }
 
-    public String getSexo() {
+    public char getSexo() {
         return sexo;
     }
 
-    public void setSexo(String sexo) {
+    public void setSexo(char sexo) {
         this.sexo = sexo;
-    }
-
-    public int getAltura() {
-        return altura;
-    }
-
-    public void setAltura(int altura) {
-        this.altura = altura;
     }
 
     public String getCondicao() {
@@ -75,17 +65,13 @@ public class Usuario {
         this.condicao = condicao;
     }
 
-    public LocalTime[] getDisponibilidade() {
+    public LocalTime getDisponibilidade() {
         return disponibilidade;
     }
 
-    public void setDisponibilidade(LocalTime[] disponibilidade) {
+    public void setDisponibilidade(LocalTime disponibilidade) {
         this.disponibilidade = disponibilidade;
     }
-
-    public double getPeso() { return peso; }
-
-    public void setPeso(double peso) { this.peso = peso; }
 
     public String getFoco() { return foco; }
 

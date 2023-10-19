@@ -3,13 +3,17 @@ package com.example.fitnessapp.db;
 import android.content.Context;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.fitnessapp.db.classes.Exercicio;
 import com.example.fitnessapp.db.classes.ExercicioDao;
 import com.example.fitnessapp.db.classes.Usuario;
+import com.example.fitnessapp.db.classes.UsuarioSession;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,10 +29,23 @@ public class ListaExercicios {
 
 
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void create(Context context, Usuario usuario) {
+    public void create(Context context, @NonNull Usuario usuario, char tipo) throws Exception {
         ExercicioDao dao = new ExercicioDao(context);
 
+        // Intensidade
+        int condicao = Integer.parseInt(UsuarioSession.convertCondicao(usuario.getCondicao()));
+        char intensidade =
+                condicao < 3? '0' : ( condicao < 5 ? '1' : '2' ) ;
 
+
+
+
+        /*
+            0 : Físico
+            1 : Cognitivo
+         */
+
+        List<Exercicio> exercs = dao.buscar(tipo, intensidade, usuario.getDisponibilidade());
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)

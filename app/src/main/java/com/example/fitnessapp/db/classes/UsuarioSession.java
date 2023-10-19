@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
@@ -38,7 +39,7 @@ public class UsuarioSession {
     }
 
     public boolean isLogged() {
-        return usuario != null;
+        return usuario != null && usuario.getID() != 0;
     }
 
     public Usuario getUsuario() {
@@ -64,20 +65,21 @@ public class UsuarioSession {
         try(Cursor verify = database.query(tabela, null, selecao, selecaoArgs, null, null, null)) {
             if(verify.moveToFirst()) {
                 // Definição do usuário
+                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+                DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
+
                 Usuario usuario = new Usuario();
                     usuario.setID(verify.getInt(verify.getColumnIndex("idUsuario")));
                     usuario.setNome(verify.getString(verify.getColumnIndex("usu_nome")));
                     usuario.setEmail(verify.getString(verify.getColumnIndex("usu_email")));
-                    usuario.setSexo(verify.getString(verify.getColumnIndex("usu_sexo")));
-                    usuario.setAltura(verify.getInt(verify.getColumnIndex("usu_altura")));
-                    usuario.setPeso(verify.getDouble(verify.getColumnIndex("usu_peso")));
+                    usuario.setSexo(verify.getString(verify.getColumnIndex("usu_sexo")).charAt(0));
                     usuario.setCondicao(verify.getString(verify.getColumnIndex("usu_condicao")));
+                    usuario.setDisponibilidade(LocalTime.parse(verify.getString(verify.getColumnIndex("usu_tempoDisponivel")), timeFormat));
 
-                DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 usuario.setDatanasc(LocalDate.parse( verify.getString(verify.getColumnIndex("usu_datanasc")), format));
 
                 // Incializa a instância
-                this.usuario = usuario;
+                UsuarioSession.usuario = usuario;
                 return true;
             } else {
                 return false;
@@ -98,22 +100,17 @@ public class UsuarioSession {
         try {
             database.beginTransaction();
 
-            LocalTime[] time = usuario.getDisponibilidade();
-
             ContentValues values = new ContentValues();
                 // Dados de segurança e identificação
                 values.put("usu_nome", usuario.getNome());
                 values.put("usu_email", usuario.getEmail());
                 values.put("usu_senha", senha); // <- Existe somente para cadastro e login
                 values.put("usu_datanasc", usuario.getDatanasc().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
-                values.put("usu_sexo", String.valueOf(usuario.getSexo().charAt(0)));
-                // Dados para calculo de exercicios
-                values.put("usu_altura", usuario.getAltura());
-                values.put("usu_peso", usuario.getPeso());
+                values.put("usu_sexo", String.valueOf(usuario.getSexo()));
+
                 // Dados de restrição
                 values.put("usu_condicao", String.valueOf( convertCondicao(usuario.getCondicao()).charAt(0) ));
-                values.put("usu_initDisponivel", time[0].format(DateTimeFormatter.ofPattern("HH:mm:ss")));
-                values.put("usu_endDisponivel", time[1].format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+                values.put("usu_tempoDisponivel", usuario.getDisponibilidade().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
             if(usuario.getFoco() != null && !usuario.getFoco().isEmpty()) {
                 String[] values2 = {usuario.getFoco()};
@@ -124,7 +121,7 @@ public class UsuarioSession {
             }
 
             database.insert(tabela, null, values);
-            this.usuario = usuario;
+            UsuarioSession.usuario = usuario;
 
             database.setTransactionSuccessful();
         } catch (Exception e) {
@@ -134,7 +131,7 @@ public class UsuarioSession {
         }
     }
 
-    private String convertCondicao(@NonNull String condicao) throws Exception {
+    public static String convertCondicao(@NonNull String condicao) throws Exception {
         switch(condicao.trim()) {
             case "Sedentário": return "0";
             case "Praticante": return "1";

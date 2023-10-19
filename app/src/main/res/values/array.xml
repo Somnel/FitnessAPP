@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="ExercRealizado">
+        <item>Treino de Força</item>
+        <item>Resistência</item>
+        <item>Equilíbrio</item>
+        <item>Flexibilidade</item>
+        <item>Corridas</item>
+        <item>Pular Corda</item>
+    </string-array>
+    <string-array name="FocoTreino">
+        <item>Superiores</item>
+        <item>Inferiores</item>
+    </string-array>
+    <string-array name="ObjTreino">
+        <item>Prevenção de Doenças</item>
+        <item>Ganho de Massa Magra</item>
+        <item>Perda de gordura</item>
+        <item>Fortalecimento</item>
+    </string-array>
+</resources>

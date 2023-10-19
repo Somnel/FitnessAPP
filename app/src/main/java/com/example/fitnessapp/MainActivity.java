@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView txtview_cadastro;
     private Class login_redirect;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
                 String email = field_email.getText().toString();
                 String senha = field_senha.getText().toString();
 
-                login(email, senha);
+                // if( !(email.isEmpty() || senha.isEmpty()) )
+                    login(email, senha);
             }
         });
 
@@ -61,26 +63,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void login(String email, String senha) {
+
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 UsuarioSession usuarioSession = UsuarioSession.getInstance(this);
-
-                Log.d("Exemplo", usuarioSession.isEmailFree("daddyissuesissexy@total.com") ? "Sim está livre" : "Não esta livre");
 
                 if(usuarioSession.isEmailFree("daddyissuesissexy@total.com")) {
                     Usuario usuario = new Usuario();
                     usuario.setNome("Willian Afton");
                     usuario.setEmail("daddyissuesissexy@total.com");
                     usuario.setDatanasc(LocalDate.now());
-                    usuario.setSexo("M");
-                    usuario.setAltura(200);
-                    usuario.setPeso(120.0);
+                    usuario.setSexo('M');
                     usuario.setFoco(null);
                     usuario.setCondicao("Sedentário");
 
-                    LocalTime[] lctime = new LocalTime[2];
-                        lctime[0] = LocalTime.of(18, 0, 0);
-                        lctime[1] = LocalTime.of(22, 0, 0);
+                    LocalTime lctime = LocalTime.of(18, 0, 0);
                     usuario.setDisponibilidade(lctime);
 
                     usuarioSession.cadastrar(usuario, "123456");

@@ -56,15 +56,38 @@ public class ExercicioDao {
     }
 
 
-    public List<Exercicio> buscar(int[] idExercicios) {
-        ArrayList<Exercicio> exercs = new ArrayList<>();
+    @SuppressLint("Range")
+    public List<Exercicio> buscar(char tipo, char intensidade, LocalTime duracao_limite) {
 
-        for(int id : idExercicios) {
-            Exercicio temp = buscar(id);
-            if(temp != null) exercs.add(temp);
+        ArrayList<Exercicio> listExercs = new ArrayList<>();
+        String selecao = "exerc_intensidade = ? AND exerc_duracao < ?";
+        String[] selecaoArgs = {String.valueOf(intensidade), duracao_limite.format(sqlFormat)};
+
+        try(Cursor verify = database.query(tabela, null, selecao, selecaoArgs, null, null, null)) {
+            database.beginTransaction();
+
+            while (verify.moveToNext()) {
+                Exercicio exerc = new Exercicio();
+                    exerc.setID(verify.getInt(verify.getColumnIndex("idExercicio")));
+                    exerc.setNome(verify.getString(verify.getColumnIndex("exerc_nome")));
+                    exerc.setTipo(verify.getString(verify.getColumnIndex("exerc_tipo")).charAt(0));
+                    exerc.setDescricao(verify.getString(verify.getColumnIndex("exerc_desc")));
+                    exerc.setIllustracao(verify.getString(verify.getColumnIndex("exerc_illu")));
+                    exerc.setIntensidade(verify.getString(verify.getColumnIndex("exerc_intensidade")).charAt(0));
+                    exerc.setLimite_semanal(verify.getInt(verify.getColumnIndex("exerc_limite")));
+                    exerc.setDuracao(LocalTime.parse(verify.getString(verify.getColumnIndex("exerc_duracao")), sqlFormat));
+
+                listExercs.add(exerc);
+            }
+
+            database.endTransaction();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            database.endTransaction();
         }
 
-        return exercs;
+        return listExercs;
     }
 
 
@@ -145,4 +168,5 @@ public class ExercicioDao {
             return false;
         }
     }
+
 }
