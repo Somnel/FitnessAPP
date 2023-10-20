@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Build;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -16,15 +17,16 @@ import com.example.fitnessapp.MainActivity;
 import com.example.fitnessapp.db.sql;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class UsuarioSession {
     private static UsuarioSession instance;
-    private SQLiteDatabase database;
-    private sql dbHelper;
+    private final SQLiteDatabase database;
+    private final sql dbHelper;
     private static Usuario usuario;
-    private String tabela = "tbUsuario";
+    private final String tabela = "tbUsuario";
 
     private UsuarioSession(Context context) {
         dbHelper = new sql(context);
@@ -42,10 +44,6 @@ public class UsuarioSession {
         return usuario != null && usuario.getID() != 0;
     }
 
-    public Usuario getUsuario() {
-        if(!isLogged()) return null;
-        else return usuario;
-    }
 
     public static void logOut(Activity activity) {
         usuario = new Usuario();
@@ -87,10 +85,13 @@ public class UsuarioSession {
         }
     }
 
-    public boolean isEmailFree(String email) { // Procura se o email já esta cadastrado
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public boolean isEmailFree(@NonNull String email) { // Procura se o email já esta cadastrado
         try(Cursor verify = database.query(tabela, null, "usu_email = ?", new String[]{email}, null, null, null)) {
-            if(verify.moveToFirst()) return false;
-            else return true;
+            return !verify.moveToFirst();
+        } catch (Exception e) {
+            Log.e("isEmailFree [" + LocalDateTime.now() + "]", Log.getStackTraceString(e));
+            return false;
         }
     }
 
@@ -140,23 +141,6 @@ public class UsuarioSession {
                 if(! (condicao.equals("0") || condicao.equals("1") || condicao.equals("2")) )
                     throw  new Exception("Condição invalida");
                 else return condicao;
-        }
-    }
-
-    private String converCondicao(char condicao) throws Exception{
-        switch (condicao) {
-            case '0' : return "Sedentário";
-            case '1' : return "Praticante";
-            case '2' : return "Expert";
-            default: throw new Exception("Condição invalida");
-        }
-    }
-
-    private String convertSexo(@NonNull String sexo) {
-        switch(sexo.toUpperCase().trim()) {
-            case "F": return "Mulher";
-            case "M": return "Homem";
-            default: return "Sexo invalido";
         }
     }
 }

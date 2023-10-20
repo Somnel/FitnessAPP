@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -21,10 +20,9 @@ public class Cadastro_RecyclerViewAdapter extends RecyclerView.Adapter<Cadastro_
     ArrayList<String> listItens;
     private final CadastroInterface itensInterface;
 
-    public Cadastro_RecyclerViewAdapter(Context context, ArrayAdapter<String> listItensAdapter, CadastroInterface itensInterface) {
+    public Cadastro_RecyclerViewAdapter(Context context, @NonNull ArrayList<String> listItensAdapter, CadastroInterface itensInterface) {
         this.context = context;
-        for(int i = 0; i < listItensAdapter.getCount(); i++)
-            this.listItens.add(listItensAdapter.getItem(i));
+        this.listItens = listItensAdapter;
         this.itensInterface = itensInterface;
     }
 
@@ -43,7 +41,7 @@ public class Cadastro_RecyclerViewAdapter extends RecyclerView.Adapter<Cadastro_
 
     @Override
     public int getItemCount() {
-        return listItens.size();
+        return listItens == null ? 0 : listItens.size();
     }
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{

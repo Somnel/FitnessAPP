@@ -135,7 +135,7 @@
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="4"
+            android:max="8"
             android:progress="0" />
 
         <TextView
@@ -148,6 +148,11 @@
 
             android:text="..." />
 
+
+        <Spinner
+            android:id="@+id/spinnerteste"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
         <include
             layout="@layout/cadastro_addspinner"

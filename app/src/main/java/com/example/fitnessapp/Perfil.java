@@ -1,18 +1,13 @@
 package com.example.fitnessapp;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
 
-import com.example.fitnessapp.db.classes.Usuario;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.example.fitnessapp.db.classes.UsuarioSession;
 
 public class Perfil extends AppCompatActivity {
-
-    private TextView perfil;
 
     @Override
     public void onBackPressed() {
@@ -30,7 +25,6 @@ public class Perfil extends AppCompatActivity {
 
         UsuarioSession usuarioSession = UsuarioSession.getInstance(this);
         if(!usuarioSession.isLogged()) { UsuarioSession.logOut(this); }
-        Usuario usuario = usuarioSession.getUsuario();
 
     }
 }

@@ -1,6 +1,5 @@
 package com.example.fitnessapp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -27,10 +26,13 @@ import com.example.fitnessapp.Cadastro_Classes.Cadastro_RecyclerViewAdapter;
 import com.example.fitnessapp.db.classes.Usuario;
 import com.example.fitnessapp.db.classes.UsuarioSession;
 
+import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
@@ -50,8 +52,6 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
     // Spinners.Exercicios_Realizados
     private Spinner cadastroExercicioRealizado;
     private Button cadastroExercicioRealizadoBtn;
-    private ArrayAdapter<String> cadastroExercicioRealizadoArray;
-    private RecyclerView cadastroExercicioRealizadoView;
     private Cadastro_RecyclerViewAdapter cadastroExercicioRealizadoViewAdapter;
 
     // Spinners.Foco_Treino
@@ -66,9 +66,9 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
     private Button cadastroObjetivoBtn;
 
     // Spinners.Lista
-    private ArrayList<String> cadastroExercicioRealizadoItens = new ArrayList<>();
-    private ArrayList<String> cadastroFocoTreinoItens = new ArrayList<>();
-    private ArrayList<String> cadastroObjetivoItens = new ArrayList<>();
+    private final ArrayList<String> cadastroExercicioRealizadoItens = new ArrayList<>();
+    private final ArrayList<String> cadastroFocoTreinoItens = new ArrayList<>();
+    private final ArrayList<String> cadastroObjetivoItens = new ArrayList<>();
 
     //
 
@@ -98,12 +98,13 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
         cadastroExercicioRealizadoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String itemSelecionado = cadastroExercicioRealizado.getSelectedItem().toString();
+                if(cadastroExercicioRealizado.getCount() != 0) {
+                    String itemSelecionado = cadastroExercicioRealizado.getSelectedItem().toString();
 
-                if(!TextUtils.isEmpty(itemSelecionado)) {
-                    cadastroExercicioRealizadoItens.add(itemSelecionado);
-                    cadastroExercicioRealizadoArray.remove(itemSelecionado);
-                    cadastroExercicioRealizadoArray.notifyDataSetChanged();
+                    if(!TextUtils.isEmpty(itemSelecionado)) {
+                        cadastroExercicioRealizadoItens.add(itemSelecionado);
+                        updateSpinners(cadastroExercicioRealizado);
+                    }
                 }
             }
         });
@@ -172,7 +173,10 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
         cadastroDisponibilidade.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                cadastroDisponibilidadeText.setText(progress + ":" + "00");
+                final String separador = ":";
+                final int horas = progress * 30;
+                final int minutos = (horas % 60);
+                cadastroDisponibilidadeText.setText( (progress > 0 ? horas/60 : 0) + separador + (minutos == 0 ? "00" : minutos) );
             }
 
             @Override
@@ -186,10 +190,27 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
             }
         });
 
-
+        // updateSpinners(cadastroObjetivo);
+        // updateSpinners(cadastroFocoTreino);
     }
 
-    @SuppressLint("ResourceType")
+    private void updateSpinners(Spinner spin) {
+        try{
+            // -> Itens
+            ArrayList<String> itensAdapter = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ExercRealizado)));
+            for(String item : cadastroExercicioRealizadoItens) itensAdapter.remove(item);
+
+            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, itensAdapter);
+            spin.setAdapter(adapter);
+
+            // -> Spinner
+            spin.setEnabled(spin.getAdapter().getCount() != 0);
+        } catch (NullPointerException e) {
+            Log.e("{Exceção Spinner : " + spin.toString(), String.valueOf(e));
+        }
+    }
+
+
     private void init() {
         cadastroNome = findViewById(R.id.cadastroNome);
         cadastroDatanasc = findViewById(R.id.cadastroDatanasc);
@@ -206,30 +227,35 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
         LinearLayout addSpinner_foco = findViewById(R.id.cadastroFoco);
         LinearLayout addSpinner_objetivo = findViewById(R.id.cadastroObjetivo);
 
+
+
+        // Spinners.Exercicio_Realizado -> Field
         cadastroExercicioRealizado = addSpinner_exercRealizado.findViewById(R.id.addspinnerID);
         cadastroExercicioRealizadoBtn = addSpinner_exercRealizado.findViewById(R.id.btnAddspinner);
-        cadastroExercicioRealizadoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, R.array.ExercRealizado);
-        cadastroExercicioRealizadoView = addSpinner_exercRealizado.findViewById(R.id.viewAddspinner);
-        cadastroExercicioRealizadoViewAdapter = new Cadastro_RecyclerViewAdapter(this, cadastroExercicioRealizadoArray, this);
-        cadastroExercicioRealizadoView.setAdapter(cadastroExercicioRealizadoViewAdapter);
-        cadastroExercicioRealizadoView.setLayoutManager(new LinearLayoutManager(this));
 
+        // Spinners.Exercicio_Realizado -> RecyclerView
+        cadastroExercicioRealizadoViewAdapter = new Cadastro_RecyclerViewAdapter(this, cadastroExercicioRealizadoItens, this);
+        RecyclerView cadastroExercicioRealizadoView = addSpinner_exercRealizado.findViewById(R.id.viewAddspinner);
+            cadastroExercicioRealizadoView.setAdapter(cadastroExercicioRealizadoViewAdapter);
+            cadastroExercicioRealizadoView.setLayoutManager(new LinearLayoutManager(this));
+
+
+        // Spinners.Foco_Treino
         cadastroFocoTreino = addSpinner_foco.findViewById(R.id.addspinnerID);
         cadastroFocoTreinoBtn = addSpinner_foco.findViewById(R.id.btnAddspinner);
-        cadastroObjetivoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, R.array.FocoTreino);
+        cadastroFocoTreinoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.FocoTreino));
 
+        // Spinners.Objetivos
         cadastroObjetivo = addSpinner_objetivo.findViewById(R.id.addspinnerID);
         cadastroObjetivoBtn = addSpinner_objetivo.findViewById(R.id.btnAddspinner);
-        cadastroObjetivoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, R.array.ObjTreino);
-
-        // Spinners.Adapters
-        cadastroExercicioRealizadoArray.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        cadastroExercicioRealizado.setAdapter(cadastroExercicioRealizadoArray);
+        cadastroObjetivoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ObjTreino));
 
 
         //
         cadastroDisponibilidadeText = findViewById(R.id.textHelperDisponibilidade);
         cadastroFreqExerciciosText = findViewById(R.id.textHelperFreqExerc);
+
+        updateSpinners(cadastroExercicioRealizado);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -251,13 +277,13 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
             DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss");
 
             Usuario usuario = new Usuario();
-            usuario.setNome(cadastroNome.getText().toString());
-            usuario.setEmail(cadastroEmail.getText().toString());
-            usuario.setDatanasc(LocalDate.parse(cadastroDatanasc.getText().toString()));
-            usuario.setFoco(cadastroFocoTreino.getSelectedItem().toString());
-            usuario.setSexo(cadastroSexo.getCheckedRadioButtonId() == R.id.cadastroMasc ? 'M' : 'F');
-            usuario.setCondicao(cadastroFreqExerciciosText.getText().toString());
-            usuario.setDisponibilidade(LocalTime.parse(cadastroDisponibilidadeText.getText().toString(), timeformat));
+                usuario.setNome(cadastroNome.getText().toString());
+                usuario.setEmail(cadastroEmail.getText().toString());
+                usuario.setDatanasc(LocalDate.parse(cadastroDatanasc.getText().toString()));
+                usuario.setFoco(cadastroFocoTreino.getSelectedItem().toString());
+                usuario.setSexo(cadastroSexo.getCheckedRadioButtonId() == R.id.cadastroMasc ? 'M' : 'F');
+                usuario.setCondicao(cadastroFreqExerciciosText.getText().toString());
+                usuario.setDisponibilidade(LocalTime.parse(cadastroDisponibilidadeText.getText().toString() + ":00", timeformat));
 
             Log.d("Localtime", usuario.getDisponibilidade().toString());
             usuS.cadastrar(usuario, cadastroSenha.getText().toString());
@@ -269,7 +295,7 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
     @Override
     public void removeItemExercRealizado(int position) {
-        cadastroExercicioRealizadoArray.remove(cadastroExercicioRealizadoArray.getItem(position));
+        cadastroExercicioRealizadoItens.remove(position);
         cadastroExercicioRealizadoViewAdapter.notifyItemChanged(position);
     }
 }
