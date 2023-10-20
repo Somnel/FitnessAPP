@@ -1,5 +1,6 @@
 package com.example.fitnessapp;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -26,13 +28,11 @@ import com.example.fitnessapp.Cadastro_Classes.Cadastro_RecyclerViewAdapter;
 import com.example.fitnessapp.db.classes.Usuario;
 import com.example.fitnessapp.db.classes.UsuarioSession;
 
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Objects;
 
 public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
@@ -74,6 +74,7 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
     private Button btnCadastrar;
 
+    @SuppressWarnings("deprecation")
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -103,7 +104,7 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
                     if(!TextUtils.isEmpty(itemSelecionado)) {
                         cadastroExercicioRealizadoItens.add(itemSelecionado);
-                        updateSpinners(cadastroExercicioRealizado);
+                        updateSpinners(cadastroExercicioRealizado, cadastroExercicioRealizadoItens, R.array.ExercRealizado, cadastroExercicioRealizadoViewAdapter);
                     }
                 }
             }
@@ -171,12 +172,13 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
         });
 
         cadastroDisponibilidade.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 final String separador = ":";
                 final int horas = progress * 30;
                 final int minutos = (horas % 60);
-                cadastroDisponibilidadeText.setText( (progress > 0 ? horas/60 : 0) + separador + (minutos == 0 ? "00" : minutos) );
+                cadastroDisponibilidadeText.setText(String.format("%d%s%s", progress > 0 ? horas / 60 : 0, separador, minutos == 0 ? "00" : minutos));
             }
 
             @Override
@@ -194,19 +196,20 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
         // updateSpinners(cadastroFocoTreino);
     }
 
-    private void updateSpinners(Spinner spin) {
+    private void updateSpinners(@NonNull Spinner spin, @NonNull ArrayList<String> content, final int ArrayResourceID, @NonNull Cadastro_RecyclerViewAdapter cstView) {
         try{
             // -> Itens
-            ArrayList<String> itensAdapter = new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.ExercRealizado)));
-            for(String item : cadastroExercicioRealizadoItens) itensAdapter.remove(item);
+            ArrayList<String> itensAdapter = new ArrayList<>(Arrays.asList(getResources().getStringArray(ArrayResourceID)));
+            for(String item : content) itensAdapter.remove(item);
 
             ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, itensAdapter);
             spin.setAdapter(adapter);
 
+            cstView.notifyItemInserted(content.size() - 1);
             // -> Spinner
             spin.setEnabled(spin.getAdapter().getCount() != 0);
         } catch (NullPointerException e) {
-            Log.e("{Exceção Spinner : " + spin.toString(), String.valueOf(e));
+            Log.e("{Exceção Spinner}", String.valueOf(e));
         }
     }
 
@@ -255,7 +258,7 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
         cadastroDisponibilidadeText = findViewById(R.id.textHelperDisponibilidade);
         cadastroFreqExerciciosText = findViewById(R.id.textHelperFreqExerc);
 
-        updateSpinners(cadastroExercicioRealizado);
+        updateSpinners(cadastroExercicioRealizado, cadastroExercicioRealizadoItens,R.array.ExercRealizado, cadastroExercicioRealizadoViewAdapter);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -296,6 +299,7 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
     @Override
     public void removeItemExercRealizado(int position) {
         cadastroExercicioRealizadoItens.remove(position);
-        cadastroExercicioRealizadoViewAdapter.notifyItemChanged(position);
+        cadastroExercicioRealizadoViewAdapter.notifyItemRemoved(position);
+        updateSpinners(cadastroExercicioRealizado, cadastroExercicioRealizadoItens,R.array.ExercRealizado, cadastroExercicioRealizadoViewAdapter);
     }
 }
