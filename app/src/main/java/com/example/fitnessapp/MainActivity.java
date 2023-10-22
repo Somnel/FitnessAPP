@@ -74,7 +74,6 @@ public class MainActivity extends AppCompatActivity {
                     usuario.setEmail("daddyissuesissexy@total.com");
                     usuario.setDatanasc(LocalDate.now());
                     usuario.setSexo('M');
-                    usuario.setFoco(null);
                     usuario.setCondicao("Sedentário");
 
                     LocalTime lctime = LocalTime.of(18, 0, 0);

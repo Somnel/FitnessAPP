@@ -13,7 +13,9 @@ public class Usuario {
     private char sexo;
     private String condicao;
     private LocalTime disponibilidade;
-    private String foco;
+    private ArrayList<String> foco = new ArrayList<>();
+    private ArrayList<String> exercsRealizados = new ArrayList<>();
+    private ArrayList<String> objetivos = new ArrayList<>();
 
     public Usuario() {}
 
@@ -73,7 +75,15 @@ public class Usuario {
         this.disponibilidade = disponibilidade;
     }
 
-    public String getFoco() { return foco; }
+    public ArrayList<String> getFoco() { return foco; }
 
-    public void setFoco(String foco) { this.foco = foco; }
+    public void setFoco(ArrayList<String> foco) { this.foco = foco; }
+
+    public ArrayList<String> getExercsRealizados() { return exercsRealizados; }
+
+    public void setExercsRealizados(ArrayList<String> exercsRealizados) {this.exercsRealizados = exercsRealizados; }
+
+    public ArrayList<String> getObjetivos() {return objetivos;}
+
+    public void setObjetivos(ArrayList<String> objetivos) {this.objetivos = objetivos; }
 }

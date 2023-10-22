@@ -20,6 +20,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 
 public class UsuarioSession {
     private static UsuarioSession instance;
@@ -62,6 +63,9 @@ public class UsuarioSession {
 
         try(Cursor verify = database.query(tabela, null, selecao, selecaoArgs, null, null, null)) {
             if(verify.moveToFirst()) {
+                database.beginTransaction();
+                UsuarioConvert convert = new UsuarioConvert();
+
                 // Definição do usuário
                 DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy-MM-dd");
                 DateTimeFormatter timeFormat = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -71,17 +75,69 @@ public class UsuarioSession {
                     usuario.setNome(verify.getString(verify.getColumnIndex("usu_nome")));
                     usuario.setEmail(verify.getString(verify.getColumnIndex("usu_email")));
                     usuario.setSexo(verify.getString(verify.getColumnIndex("usu_sexo")).charAt(0));
-                    usuario.setCondicao(verify.getString(verify.getColumnIndex("usu_condicao")));
+                    // Com conversões
                     usuario.setDisponibilidade(LocalTime.parse(verify.getString(verify.getColumnIndex("usu_tempoDisponivel")), timeFormat));
+                    usuario.setCondicao( convert.convertCondicao(verify.getString(verify.getColumnIndex("usu_condicao")).charAt(0)) );
+
+
 
                 usuario.setDatanasc(LocalDate.parse( verify.getString(verify.getColumnIndex("usu_datanasc")), format));
 
-                // Incializa a instância
+                // Multivalorados
+                String[] idStr = {String.valueOf(usuario.getID())};
+                String selecao2 = "idUsuario = ?";
+
+                // > Foco
+                try (Cursor verify2 = database.query("tbUsuarioFoco", null, selecao2 , idStr, null, null, null)) {
+                    if(verify2.moveToFirst()) {
+                        ArrayList<String> focos = new ArrayList<>();
+
+                        while(verify2.moveToNext()) {
+                            focos.add( convert.convertFoco(verify2.getString(verify2.getColumnIndex("focoTipo")).charAt(0)));
+                        }
+
+                        usuario.setFoco(focos);
+                    }
+                }
+
+                // > Exercicio Realizado
+                try (Cursor verify2 = database.query("tbUsuarioExercsRealizado", null, selecao2 , idStr, null, null, null)) {
+                    if(verify2.moveToFirst()) {
+                        ArrayList<String> exercs = new ArrayList<>();
+
+                        while (verify2.moveToNext()) {
+                            exercs.add( convert.convertExercsRealizado( verify2.getString(verify2.getColumnIndex("exercsrealizadoUsuario")).charAt(0) ) );
+                        }
+
+                        usuario.setExercsRealizados(exercs);
+                    }
+                }
+
+                // > Objetivo
+                try (Cursor verify2 = database.query("tbUsuarioObjetivo", null, selecao2 , idStr, null, null, null)) {
+                    if(verify2.moveToFirst()) {
+                        ArrayList<String> objetivos = new ArrayList<>();
+
+                        while (verify2.moveToNext()) {
+                            objetivos.add( convert.convertObjetivo( verify2.getString( verify2.getColumnIndex( "objUsuario" ) ).charAt(0) ) );
+                        }
+
+                        usuario.setObjetivos(objetivos);
+                    }
+                }
+
+
                 UsuarioSession.usuario = usuario;
+                database.setTransactionSuccessful();
                 return true;
             } else {
                 return false;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            database.endTransaction();
         }
     }
 
@@ -97,50 +153,83 @@ public class UsuarioSession {
 
     @SuppressLint("Range")
     @RequiresApi(api = Build.VERSION_CODES.O)
-    public void cadastrar(@NonNull Usuario usuario, @NonNull String senha) {
+    public boolean cadastrar(@NonNull Usuario usuario, @NonNull String senha) {
         try {
             database.beginTransaction();
+            UsuarioConvert convert = new UsuarioConvert();
 
             ContentValues values = new ContentValues();
                 // Dados de segurança e identificação
                 values.put("usu_nome", usuario.getNome());
                 values.put("usu_email", usuario.getEmail());
-                values.put("usu_senha", senha); // <- Existe somente para cadastro e login
+                values.put("usu_senha", senha);
                 values.put("usu_datanasc", usuario.getDatanasc().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
                 values.put("usu_sexo", String.valueOf(usuario.getSexo()));
 
                 // Dados de restrição
-                values.put("usu_condicao", String.valueOf( convertCondicao(usuario.getCondicao()).charAt(0) ));
+                values.put("usu_condicao", String.valueOf( convert.convertCondicao(usuario.getCondicao())));
                 values.put("usu_tempoDisponivel", usuario.getDisponibilidade().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
 
-            if(usuario.getFoco() != null && !usuario.getFoco().isEmpty()) {
-                String[] values2 = {usuario.getFoco()};
-                Cursor verify = database.query("tbGrupoMuscular", new String[]{"idGrupoMusc"}, "Musculo = ?", values2, null, null, null);
+            final long ID = database.insert(tabela, null, values);
 
-                values.put("usu_foco", verify.getInt(verify.getColumnIndex("idGrupoMusc")));
-                verify.close();
+            // Dados multivalorados
+
+            // > EXERCICIOS REALIZADOS
+            if(!usuario.getExercsRealizados().isEmpty()) {
+                for(String exerc : usuario.getExercsRealizados()) {
+                    ContentValues values2 = new ContentValues();
+                        values2.put("idUsuario", ID);
+                        values2.put("exercsrealizadoUsuario", String.valueOf( convert.convertExercsRealizado(exerc) ));
+
+                    database.insert("tbUsuarioExercsRealizado", null, values2);
+                }
             }
+
+
+            // > FOCO
+            if(!usuario.getFoco().isEmpty()) {
+                if(usuario.getFoco().size() == 2) {
+                    ContentValues values2 = new ContentValues();
+                    values2.put("idUsuario", ID);
+                    values2.put("focoTipo", "2");
+
+                    database.insert("tbUsuarioFoco", null, values2);
+                } else {
+                    for(String foco : usuario.getFoco()) {
+                        ContentValues values2 = new ContentValues();
+                        values2.put("idUsuario", ID);
+                        values2.put("focoTipo", String.valueOf( convert.convertFoco(foco) ));
+
+                        database.insert("tbUsuarioFoco", null, values2);
+                    }
+                }
+            }
+
+
+            // > OBJETIVOS
+            if(!usuario.getObjetivos().isEmpty()){
+                for(String objetivo : usuario.getObjetivos()) {
+                    ContentValues values2 = new ContentValues();
+                        values2.put("idUsuario", ID);
+                        values2.put("objUsuario", String.valueOf( convert.convertObjetivo( objetivo ) ));
+
+                    database.insert("tbUsuarioObjetivo", null, values2);
+                }
+            }
+
+
 
             database.insert(tabela, null, values);
             UsuarioSession.usuario = usuario;
 
             database.setTransactionSuccessful();
+            return true;
         } catch (Exception e) {
             throw new RuntimeException(e);
         } finally {
-            database.setTransactionSuccessful();
+            database.endTransaction();
         }
     }
 
-    public static String convertCondicao(@NonNull String condicao) throws Exception {
-        switch(condicao.trim()) {
-            case "Sedentário": return "0";
-            case "Praticante": return "1";
-            case "Expert": return "2";
-            default:
-                if(! (condicao.equals("0") || condicao.equals("1") || condicao.equals("2")) )
-                    throw  new Exception("Condição invalida");
-                else return condicao;
-        }
-    }
+
 }

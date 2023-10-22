@@ -9,12 +9,9 @@ import androidx.annotation.RequiresApi;
 import com.example.fitnessapp.db.classes.Exercicio;
 import com.example.fitnessapp.db.classes.ExercicioDao;
 import com.example.fitnessapp.db.classes.Usuario;
-import com.example.fitnessapp.db.classes.UsuarioSession;
+import com.example.fitnessapp.db.classes.UsuarioConvert;
 
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,9 +28,11 @@ public class ListaExercicios {
     @RequiresApi(api = Build.VERSION_CODES.O)
     public void create(Context context, @NonNull Usuario usuario, char tipo) throws Exception {
         ExercicioDao dao = new ExercicioDao(context);
+        UsuarioConvert convert = new UsuarioConvert();
+
 
         // Intensidade
-        int condicao = Integer.parseInt(UsuarioSession.convertCondicao(usuario.getCondicao()));
+        int condicao = Integer.parseInt(String.valueOf(convert.convertCondicao(usuario.getCondicao())));
         char intensidade =
                 condicao < 3? '0' : ( condicao < 5 ? '1' : '2' ) ;
 

@@ -5,74 +5,52 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fitnessapp.Cadastro_Classes.CadastroInterface;
-import com.example.fitnessapp.Cadastro_Classes.Cadastro_RecyclerViewAdapter;
+import com.example.fitnessapp.Cadastro_Classes.AddSpinner;
+import com.example.fitnessapp.Cadastro_Classes.CampoData;
 import com.example.fitnessapp.db.classes.Usuario;
 import com.example.fitnessapp.db.classes.UsuarioSession;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Cadastro extends AppCompatActivity implements CadastroInterface {
+public class Cadastro extends AppCompatActivity {
 
     private TextView cadastroDisponibilidadeText;
     private TextView cadastroFreqExerciciosText;
 
 
     private EditText cadastroNome;
-    private EditText cadastroDatanasc;
+    private CampoData cadastroDatanasc;
     private EditText cadastroEmail;
     private EditText cadastroSenha;
     private RadioGroup cadastroSexo;
     private SeekBar cadastroFreqExercicios;
     private SeekBar cadastroDisponibilidade;
 
-    // Spinners
-    // Spinners.Exercicios_Realizados
-    private Spinner cadastroExercicioRealizado;
-    private Button cadastroExercicioRealizadoBtn;
-    private Cadastro_RecyclerViewAdapter cadastroExercicioRealizadoViewAdapter;
-
-    // Spinners.Foco_Treino
-    private Spinner cadastroFocoTreino;
-    private ArrayAdapter<String> cadastroFocoTreinoArray;
-    private Button cadastroFocoTreinoBtn;
-
-
-    // Spinners.Objetivos
-    private Spinner cadastroObjetivo;
-    private ArrayAdapter<String> cadastroObjetivoArray;
-    private Button cadastroObjetivoBtn;
-
-    // Spinners.Lista
-    private final ArrayList<String> cadastroExercicioRealizadoItens = new ArrayList<>();
-    private final ArrayList<String> cadastroFocoTreinoItens = new ArrayList<>();
-    private final ArrayList<String> cadastroObjetivoItens = new ArrayList<>();
-
-    //
-
     private Button btnCadastrar;
+
+    // Spinners
+    private AddSpinner cadastroExercicioRealizado;
+    private AddSpinner cadastroFocoTreino;
+    private AddSpinner cadastroObjetivo;
+
+
+
 
     @SuppressWarnings("deprecation")
     @Override
@@ -95,54 +73,6 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
             startActivity(intent);
             finish();
         }
-
-        cadastroExercicioRealizadoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(cadastroExercicioRealizado.getCount() != 0) {
-                    String itemSelecionado = cadastroExercicioRealizado.getSelectedItem().toString();
-
-                    if(!TextUtils.isEmpty(itemSelecionado)) {
-                        cadastroExercicioRealizadoItens.add(itemSelecionado);
-                        updateSpinners(cadastroExercicioRealizado, cadastroExercicioRealizadoItens, R.array.ExercRealizado, cadastroExercicioRealizadoViewAdapter);
-                    }
-                }
-            }
-        });
-
-        cadastroFocoTreinoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String itemSelecionado = cadastroFocoTreino.getSelectedItem().toString();
-
-                if(!TextUtils.isEmpty(itemSelecionado)) {
-                    cadastroFocoTreinoItens.add(itemSelecionado);
-                    cadastroFocoTreinoArray.remove(itemSelecionado);
-                    cadastroFocoTreinoArray.notifyDataSetChanged(); // Atualiza o Spinner
-                }
-            }
-        });
-
-
-        cadastroObjetivoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String itemSelecionado = cadastroObjetivo.getSelectedItem().toString();
-
-                if(!TextUtils.isEmpty(itemSelecionado)) {
-                    cadastroObjetivoItens.add(itemSelecionado);
-                    cadastroObjetivoArray.remove(itemSelecionado);
-                    cadastroObjetivoArray.notifyDataSetChanged(); // Atualiza o Spinner
-                }
-            }
-        });
-
-
-
-
-
-
-
 
         btnCadastrar.setOnClickListener(new View.OnClickListener() {
             @RequiresApi(api = Build.VERSION_CODES.O)
@@ -191,32 +121,12 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
             }
         });
-
-        // updateSpinners(cadastroObjetivo);
-        // updateSpinners(cadastroFocoTreino);
-    }
-
-    private void updateSpinners(@NonNull Spinner spin, @NonNull ArrayList<String> content, final int ArrayResourceID, @NonNull Cadastro_RecyclerViewAdapter cstView) {
-        try{
-            // -> Itens
-            ArrayList<String> itensAdapter = new ArrayList<>(Arrays.asList(getResources().getStringArray(ArrayResourceID)));
-            for(String item : content) itensAdapter.remove(item);
-
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, itensAdapter);
-            spin.setAdapter(adapter);
-
-            cstView.notifyItemInserted(content.size() - 1);
-            // -> Spinner
-            spin.setEnabled(spin.getAdapter().getCount() != 0);
-        } catch (NullPointerException e) {
-            Log.e("{Exceção Spinner}", String.valueOf(e));
-        }
     }
 
 
+    @SuppressLint("SetTextI18n")
     private void init() {
         cadastroNome = findViewById(R.id.cadastroNome);
-        cadastroDatanasc = findViewById(R.id.cadastroDatanasc);
         cadastroEmail = findViewById(R.id.cadastroEmail);
         cadastroSenha = findViewById(R.id.cadastroSenha);
         cadastroSexo = findViewById(R.id.cadastroSexo);
@@ -225,45 +135,44 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
 
         btnCadastrar = findViewById(R.id.cadastroBtn);
 
+        // Data
+        LinearLayout date = findViewById(R.id.cadastroDate);
+        cadastroDatanasc = new CampoData(getSupportFragmentManager(), date.findViewById(R.id.dateText), date.findViewById(R.id.dateBtn));
+
         // Spinners
-        LinearLayout addSpinner_exercRealizado = findViewById(R.id.cadastroExercsRealizados);
-        LinearLayout addSpinner_foco = findViewById(R.id.cadastroFoco);
-        LinearLayout addSpinner_objetivo = findViewById(R.id.cadastroObjetivo);
+        cadastroExercicioRealizado = createAddSpinner(findViewById(R.id.cadastroExercsRealizados), R.array.ExercRealizado);
+        cadastroFocoTreino = createAddSpinner(findViewById(R.id.cadastroFoco), R.array.FocoTreino);
+        cadastroObjetivo = createAddSpinner(findViewById(R.id.cadastroObjetivo), R.array.ObjTreino);
 
-
-
-        // Spinners.Exercicio_Realizado -> Field
-        cadastroExercicioRealizado = addSpinner_exercRealizado.findViewById(R.id.addspinnerID);
-        cadastroExercicioRealizadoBtn = addSpinner_exercRealizado.findViewById(R.id.btnAddspinner);
-
-        // Spinners.Exercicio_Realizado -> RecyclerView
-        cadastroExercicioRealizadoViewAdapter = new Cadastro_RecyclerViewAdapter(this, cadastroExercicioRealizadoItens, this);
-        RecyclerView cadastroExercicioRealizadoView = addSpinner_exercRealizado.findViewById(R.id.viewAddspinner);
-            cadastroExercicioRealizadoView.setAdapter(cadastroExercicioRealizadoViewAdapter);
-            cadastroExercicioRealizadoView.setLayoutManager(new LinearLayoutManager(this));
-
-
-        // Spinners.Foco_Treino
-        cadastroFocoTreino = addSpinner_foco.findViewById(R.id.addspinnerID);
-        cadastroFocoTreinoBtn = addSpinner_foco.findViewById(R.id.btnAddspinner);
-        cadastroFocoTreinoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.FocoTreino));
-
-        // Spinners.Objetivos
-        cadastroObjetivo = addSpinner_objetivo.findViewById(R.id.addspinnerID);
-        cadastroObjetivoBtn = addSpinner_objetivo.findViewById(R.id.btnAddspinner);
-        cadastroObjetivoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, getResources().getStringArray(R.array.ObjTreino));
-
-
-        //
+        // init-txtHelpers
         cadastroDisponibilidadeText = findViewById(R.id.textHelperDisponibilidade);
-        cadastroFreqExerciciosText = findViewById(R.id.textHelperFreqExerc);
+            cadastroDisponibilidadeText.setText("00:00");
+            cadastroDisponibilidade.setProgress(0);
 
-        updateSpinners(cadastroExercicioRealizado, cadastroExercicioRealizadoItens,R.array.ExercRealizado, cadastroExercicioRealizadoViewAdapter);
+        cadastroFreqExerciciosText = findViewById(R.id.textHelperFreqExerc);
+            cadastroFreqExerciciosText.setText(R.string.condicaoLeve);
+            cadastroFreqExercicios.setProgress(0);
     }
+
+    private AddSpinner createAddSpinner(LinearLayout layout, int ArrayID) {
+        ArrayList<String> itens = new ArrayList<>(Arrays.asList(getResources().getStringArray(ArrayID)));
+        RecyclerView view = layout.findViewById(R.id.viewAddspinner);
+        return new AddSpinner(this, layout.findViewById(R.id.addspinnerID), layout.findViewById(R.id.btnAddspinner), view, itens);
+    }
+
+
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void cadastrar() {
 
+        // Validação dos campos
+        if(TextUtils.isEmpty(cadastroNome.getText()) || TextUtils.isEmpty(cadastroEmail.getText()) || TextUtils.isEmpty(cadastroSenha.getText())) {
+            Toast.makeText(this, "Preencha todos os campos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
+        // Validação do cadastro
         if(!UsuarioSession.getInstance(this).isEmailFree(cadastroEmail.getText().toString())) {
             Toast.makeText(this, "Email já cadastrado", Toast.LENGTH_SHORT).show();
             return;
@@ -275,31 +184,36 @@ public class Cadastro extends AppCompatActivity implements CadastroInterface {
             return;
         }
 
+        // Registro
         try {
             UsuarioSession usuS = UsuarioSession.getInstance(this);
-            DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("HH:mm:ss");
+            DateTimeFormatter timeformat = DateTimeFormatter.ofPattern("H:mm:ss");
 
             Usuario usuario = new Usuario();
                 usuario.setNome(cadastroNome.getText().toString());
                 usuario.setEmail(cadastroEmail.getText().toString());
-                usuario.setDatanasc(LocalDate.parse(cadastroDatanasc.getText().toString()));
-                usuario.setFoco(cadastroFocoTreino.getSelectedItem().toString());
+                usuario.setDatanasc(cadastroDatanasc.getDate());
                 usuario.setSexo(cadastroSexo.getCheckedRadioButtonId() == R.id.cadastroMasc ? 'M' : 'F');
                 usuario.setCondicao(cadastroFreqExerciciosText.getText().toString());
+
+                usuario.setFoco(cadastroFocoTreino.getSelectedItens());
+                usuario.setExercsRealizados(cadastroExercicioRealizado.getSelectedItens());
+                usuario.setObjetivos(cadastroObjetivo.getSelectedItens());
+
                 usuario.setDisponibilidade(LocalTime.parse(cadastroDisponibilidadeText.getText().toString() + ":00", timeformat));
 
-            Log.d("Localtime", usuario.getDisponibilidade().toString());
-            usuS.cadastrar(usuario, cadastroSenha.getText().toString());
+            boolean concluido = usuS.cadastrar(usuario, cadastroSenha.getText().toString());
+
+            if(concluido) {
+                Intent intent = new Intent(this, Principal.class);
+                startActivity(intent);
+                finish();
+            }
 
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    @Override
-    public void removeItemExercRealizado(int position) {
-        cadastroExercicioRealizadoItens.remove(position);
-        cadastroExercicioRealizadoViewAdapter.notifyItemRemoved(position);
-        updateSpinners(cadastroExercicioRealizado, cadastroExercicioRealizadoItens,R.array.ExercRealizado, cadastroExercicioRealizadoViewAdapter);
-    }
+
 }

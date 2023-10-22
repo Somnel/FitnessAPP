@@ -38,13 +38,9 @@
             android:inputType="text"
             android:hint="Nome" />
 
-        <EditText
-            android:id="@+id/cadastroDatanasc"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="date"
-            android:hint="Data de Nascimento"/>
+        <include
+            layout="@layout/cadastro_date"
+            android:id="@+id/cadastroDate" />
 
         <EditText
             android:id="@+id/cadastroEmail"
@@ -74,21 +70,22 @@
             android:id="@+id/cadastroSexo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:checkedButton="@id/cadastroMasc"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/cadastroMasc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Homem"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:text="Homem" />
 
             <RadioButton
                 android:id="@+id/cadastroFem"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Mulher"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:text="Mulher" />
 
         </RadioGroup>
 
@@ -148,11 +145,6 @@
 
             android:text="..." />
 
-
-        <Spinner
-            android:id="@+id/spinnerteste"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <include
             layout="@layout/cadastro_addspinner"
