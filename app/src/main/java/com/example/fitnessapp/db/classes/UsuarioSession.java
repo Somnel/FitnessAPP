@@ -45,6 +45,10 @@ public class UsuarioSession {
         return usuario != null && usuario.getID() != 0;
     }
 
+    public Usuario getUsuario() {
+        return isLogged() ? usuario : null;
+    }
+
 
     public static void logOut(Activity activity) {
         usuario = new Usuario();

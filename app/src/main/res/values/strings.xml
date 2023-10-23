@@ -7,4 +7,6 @@
     <string name="condicaoLeve">Sedentário</string>
     <string name="condicaoModerado">Praticante</string>
     <string name="condicaoAlta">Expert</string>
+    <string name="tituloPerfil">PERFIL</string>
+    <string name="tituloConfiguracoes">CONFIGURAÇÕES</string>
 </resources>

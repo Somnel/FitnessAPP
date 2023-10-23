@@ -24,4 +24,9 @@
         android:id="@+id/button4"
         style="@style/navbarPrincipal"
         android:text="Button" />
+
+    <Button
+        android:id="@+id/button5"
+        style="@style/navbarPrincipal"
+        android:text="Button" />
 </LinearLayout>

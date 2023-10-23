@@ -15,6 +15,7 @@ public class Exercicio {
     private char intensidade;
     private int limite_semanal;
     private ArrayList<String> musculos;
+    private ArrayList<String> classificao;
 
 
     public Exercicio() {}
@@ -86,4 +87,12 @@ public class Exercicio {
     public List<String> getMusculos() { return musculos; }
 
     public void setMusculos(ArrayList<String> musculos) { this.musculos = musculos; }
+
+    public ArrayList<String> getClassificao() {
+        return classificao;
+    }
+
+    public void setClassificao(ArrayList<String> classificao) {
+        this.classificao = classificao;
+    }
 }

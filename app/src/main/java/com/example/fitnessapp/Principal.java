@@ -1,12 +1,16 @@
 package com.example.fitnessapp;
 
+import static com.example.fitnessapp.db.ListaExercicios.getListaExercicios;
+
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.fitnessapp.db.classes.UsuarioSession;
@@ -38,14 +42,18 @@ public class Principal extends AppCompatActivity {
         }, TEMPO_LIMITE_SAIDA);
     }
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
         UsuarioSession usuarioSession = UsuarioSession.getInstance(this);
         if(!usuarioSession.isLogged()) { deslog(); }
-
         init();
+
+
 
         perfilText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -62,9 +70,19 @@ public class Principal extends AppCompatActivity {
         });
     }
 
+
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     private void init() {
         perfilText = findViewById(R.id.btnPerfil);
         configText = findViewById(R.id.btnConfig);
+
+        try {
+            getListaExercicios(this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException(e);
+        }
     }
 
     // Redirecionamento

@@ -17,12 +17,12 @@
         <TextView
             android:id="@+id/btnPerfil"
             style="@style/textviewPrincipal"
-            android:text="Perfil"/>
+            android:text="@string/tituloPerfil"/>
 
         <TextView
             android:id="@+id/btnConfig"
             style="@style/textviewPrincipal"
-            android:text="Configurações"/>
+            android:text="@string/tituloConfiguracoes"/>
     </LinearLayout>
 
     <LinearLayout
