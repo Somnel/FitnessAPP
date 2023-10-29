@@ -3,8 +3,14 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="cinza">#71717191</color>
-    <color name="background">#F5F5F5F5</color>
     <color name="hint">#191919</color>
     <color name="backTreinotrack">#108121</color>
     <color name="btnaddSpinner">#109965</color>
+    <color name="sombraItemRView">#95959595</color>
+
+    <color name="background">#F5F5F5F5</color>
+    <color name="p1">#545d6c</color>
+    <color name="p2">#b7c6dd</color>
+    <color name="p3">#242527</color>
+    <color name="p4">#82a974</color>
 </resources>

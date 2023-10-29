@@ -1,12 +1,26 @@
 <resources>
     <string name="app_name">FitnessApp</string>
-    <string name="alertaDeslogarMessage">Deseja mesmo sair?</string>
-    <string name="alertaDeslogarTitle">Sair do aplicativo</string>
-    <string name="alertaDeslogarPositive">SIM</string>
-    <string name="alertaDeslogarNegative">NÃO</string>
     <string name="condicaoLeve">Sedentário</string>
     <string name="condicaoModerado">Praticante</string>
     <string name="condicaoAlta">Expert</string>
     <string name="tituloPerfil">PERFIL</string>
     <string name="tituloConfiguracoes">CONFIGURAÇÕES</string>
+    <string name="tituloHistorico">HISTÓRICO</string>
+    <string name="placeholderText">...</string>
+    <string name="placeholderDate">././.</string>
+    <string name="HistExercicios_txtConcluido">Concluido em :</string>
+    <string name="avisoHistoricoVazio">Histórico Vazio</string>
+    <string name="avisoConteudoVazio">Aviso de Lista de Exercícios Vazia</string>
+    <string name="AppName">FitnessAPP</string>
+    <string name="tituloCadastro">CADASTRO</string>
+    <string name="tituloLembretes">Lembretes</string>
+    <string name="txtProjetoInfo">PROJETO POR</string>
+    <string name="txtProjetoNomes">...</string>
+    <string name="txtLembreteDate">Definido para as</string>
+    <string name="lembreteRemove">REMOVER</string>
+    <string name="tituloTreinos">Meus Treinos</string>
+    <string name="tituloConteudo">CONTEÚDO</string>
+    <string name="treinosAviso_completo">Treinos Completados</string>
+    <string name="treinosAviso_erro">Nenhum Exercício Registrado</string>
+    <string name="tituloAtividades">Minhas Atividades</string>
 </resources>

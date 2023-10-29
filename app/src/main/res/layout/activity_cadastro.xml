@@ -14,16 +14,18 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CADASTRO"
+        android:text="@string/tituloCadastro"
         android:gravity="center"
-        android:layout_marginVertical="10dp"
+        android:textColor="@color/p3"
+        android:textStyle="bold"
+        android:layout_marginVertical="30dp"
         android:textSize="25sp"
 
         />
 
     <LinearLayout
-        android:layout_height="0dp"
         android:layout_width="match_parent"
+        android:layout_height="0dp"
         android:layout_margin="16dp"
         android:layout_weight="1"
         android:orientation="vertical"
@@ -32,44 +34,38 @@
 
         <EditText
             android:id="@+id/cadastroNome"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="text"
-            android:hint="Nome" />
+            style="@style/cadastro_field"
+            android:hint="Nome"
+            android:inputType="text" />
+
 
         <include
-            layout="@layout/cadastro_date"
-            android:id="@+id/cadastroDate" />
+            android:id="@+id/cadastroDate"
+            layout="@layout/cadastro_date" />
 
         <EditText
             android:id="@+id/cadastroEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textEmailAddress"
-            android:hint="Email"/>
+            style="@style/cadastro_field"
+            android:hint="Email"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/cadastroSenha"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:hint="Senha"/>
+            style="@style/cadastro_field"
+            android:hint="Senha"
+            android:inputType="textPassword" />
 
         <EditText
             android:id="@+id/cadastroSenhaConfirm"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ems="10"
-            android:inputType="textPassword"
-            android:hint="Confime a Senha"/>
+            style="@style/cadastro_field"
+            android:hint="Confime a Senha"
+            android:inputType="textPassword" />
 
         <RadioGroup
             android:id="@+id/cadastroSexo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginVertical="20dp"
             android:checkedButton="@id/cadastroMasc"
             android:orientation="horizontal">
 
@@ -93,11 +89,11 @@
             android:id="@+id/textFreqExerc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="23dp"
-            android:gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:text="Frequência de Exercicios" />
+            android:gravity="center"
+            android:text="Frequência de Exercicios"
+            android:textSize="23dp" />
 
         <SeekBar
             android:id="@+id/sbarFreqExerc"
@@ -111,55 +107,56 @@
             android:id="@+id/textHelperFreqExerc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20dp"
             android:layout_marginVertical="10dp"
+            android:gravity="center"
+            android:text="..."
 
-            android:text="..." />
+            android:textSize="20dp" />
 
         <TextView
             android:id="@+id/textDisponibilidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="23sp"
-            android:gravity="center"
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
-            android:text="Disponibilidade" />
+            android:gravity="center"
+            android:text="Disponibilidade"
+            android:textSize="23sp" />
 
         <SeekBar
             android:id="@+id/sbarDisponibilidade"
             style="@style/Widget.AppCompat.SeekBar.Discrete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:max="8"
+            android:max="7"
             android:progress="0" />
 
         <TextView
             android:id="@+id/textHelperDisponibilidade"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20sp"
             android:layout_marginVertical="10dp"
+            android:gravity="center"
+            android:text="..."
 
-            android:text="..." />
+            android:textSize="20sp" />
 
-
-        <include
-            layout="@layout/cadastro_addspinner"
-            android:id="@+id/cadastroExercsRealizados"/>
 
         <include
-            layout="@layout/cadastro_addspinner"
-            android:id="@+id/cadastroFoco"/>
+            android:id="@+id/cadastroExercsRealizados"
+            layout="@layout/cadastro_addspinner" />
 
         <include
-            layout="@layout/cadastro_addspinner"
-            android:id="@+id/cadastroObjetivo"/>
+            android:id="@+id/cadastroFoco"
+            layout="@layout/cadastro_addspinner" />
+
+        <include
+            android:id="@+id/cadastroObjetivo"
+            layout="@layout/cadastro_addspinner" />
 
 
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -167,9 +164,11 @@
         android:layout_marginVertical="20dp">
 
         <Button
+            android:background="@drawable/btn_padrao"
             android:id="@+id/cadastroBtn"
             android:layout_width="200dp"
             android:layout_height="60dp"
+            android:textColor="@color/p2"
             android:text="Cadastrar" />
     </LinearLayout>
 

@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import com.example.fitnessapp.db.classes.Usuario;
 import com.example.fitnessapp.db.classes.UsuarioSession;
@@ -34,6 +35,9 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
+        getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.p3));
+        getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.p3));
+
         btn_logar.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -51,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 cadastro_activity();
             }
         });
+
     }
 
     private void init() {

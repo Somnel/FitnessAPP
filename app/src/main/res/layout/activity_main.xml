@@ -7,6 +7,8 @@
     android:background="@color/background"
     tools:context=".MainActivity">
 
+
+
     <EditText
         android:id="@+id/field_senha"
         style="@style/editText"
@@ -29,10 +31,12 @@
         android:layout_marginBottom="32dp"
 
 
-        android:hint="email"
+        android:hint="E-mail"
         android:inputType="textEmailAddress"
-        android:outlineSpotShadowColor="@color/black"
-        android:shadowColor="@color/black"
+        android:textColor="@color/black"
+        android:textColorHint="@color/p1"
+        android:shadowColor="@color/p4"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +46,12 @@
         android:id="@+id/btn_logar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="Entrar"
+        android:paddingVertical="20dp"
+        android:paddingHorizontal="60dp"
+        android:background="@color/p3"
+        android:textColor="@color/white"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -52,10 +61,12 @@
         android:id="@+id/textClick_cadastro"
         style="@style/clickableText"
 
-        android:text="Não está cadastrado? Cadastra-se"
+        android:text="Não está cadastrado? Cadastra-se Aqui"
 
         android:textAlignment="center"
         android:gravity="center"
+        android:textColor="@color/p3"
+        android:textSize="15sp"
 
         app:layout_constraintBottom_toTopOf="@+id/btn_logar"
         app:layout_constraintEnd_toEndOf="parent"
@@ -63,14 +74,52 @@
         app:layout_constraintTop_toBottomOf="@+id/field_senha" />
 
     <TextView
-        android:id="@+id/logTxt"
-        android:layout_width="wrap_content"
+        android:id="@+id/logTxt1"
+        android:text="Bem Vindo"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="TextView"
+
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textColor="@color/p3"
+
         app:layout_constraintBottom_toTopOf="@+id/field_email"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.498" />
+
+    <TextView
+        android:id="@+id/logTxt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textColor="@color/p3"
+
+        android:text="ao"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logTxt1" />
+
+    <TextView
+        android:id="@+id/logTxt3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/AppName"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:textColor="@color/p4"
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/logTxt2" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

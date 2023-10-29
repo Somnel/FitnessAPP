@@ -11,14 +11,23 @@ public class Exercicio {
     private String illustracao;
     private String descricao;
     private char tipo;
+    private boolean cronometrado;
     private LocalTime duracao;
     private char intensidade;
     private int limite_semanal;
-    private ArrayList<String> musculos;
+    private ArrayList<GrupoMuscular> musculos;
     private ArrayList<String> classificao;
 
 
     public Exercicio() {}
+
+    public boolean isCronometrado() {
+        return cronometrado;
+    }
+
+    public void setCronometrado(boolean cronometrado) {
+        this.cronometrado = cronometrado;
+    }
 
     public int getID() {
         return ID;
@@ -84,9 +93,9 @@ public class Exercicio {
         this.limite_semanal = limite_semanal;
     }
 
-    public List<String> getMusculos() { return musculos; }
+    public List<GrupoMuscular> getMusculos() { return musculos; }
 
-    public void setMusculos(ArrayList<String> musculos) { this.musculos = musculos; }
+    public void setMusculos(ArrayList<GrupoMuscular> musculos) { this.musculos = musculos; }
 
     public ArrayList<String> getClassificao() {
         return classificao;

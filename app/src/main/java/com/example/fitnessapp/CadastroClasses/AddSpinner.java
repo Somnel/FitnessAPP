@@ -1,4 +1,4 @@
-package com.example.fitnessapp.Cadastro_Classes;
+package com.example.fitnessapp.CadastroClasses;
 
 import android.content.Context;
 import android.text.TextUtils;
@@ -10,6 +10,8 @@ import android.widget.Spinner;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.fitnessapp.R;
 
 import java.util.ArrayList;
 
@@ -73,7 +75,16 @@ public class AddSpinner implements CadastroInterface {
 
             viewAdapter.notifyItemInserted(listItensSelecionados.size());
             // -> Spinner
-            spin.setEnabled(spin.getAdapter().getCount() != 0);
+            if(spin.getAdapter().getCount() != 0) {
+                spin.setEnabled(false);
+                spin.setBackgroundResource(R.drawable.addspinner_field);
+                spinBtn.setBackgroundResource(R.drawable.addspinner_button);
+            } else {
+                spin.setEnabled(true);
+                spin.setBackgroundResource(R.drawable.addspinner_field_disabled);
+                spinBtn.setBackgroundResource(R.drawable.addspinner_button_disabled);
+            }
+
         } catch (Exception e) {
             Log.e("{Exceção em" + spin.toString(), String.valueOf(e));
         }
@@ -83,6 +94,11 @@ public class AddSpinner implements CadastroInterface {
     public ArrayList<String> getSelectedItens() {
         return listItensSelecionados;
     }
+
+    public boolean reachSizeLista() {
+        return listItensSelecionados.equals(listItens);
+    }
+
 
     @Override
     public String getSelectedItem() {

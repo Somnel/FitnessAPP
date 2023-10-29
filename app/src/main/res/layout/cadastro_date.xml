@@ -4,18 +4,35 @@
     android:layout_height="wrap_content"
     android:orientation="horizontal">
 
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:paddingVertical="10dp"
+
+
+        android:text="Data de Nascimento"
+        android:textColor="@color/p3"
+        android:textSize="18sp" />
 
     <TextView
         android:id="@+id/dateText"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="TextView" />
+        android:layout_height="match_parent"
+        android:textColor="@color/p3"
+        android:gravity="center"
+        android:paddingHorizontal="45dp"
+        android:textSize="15sp"
+        android:text="@string/placeholderDate" />
 
-    <Button
+    <ImageButton
         android:id="@+id/dateBtn"
+        android:background="@drawable/addspinner_button"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="Button" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_vertical"
+        android:paddingVertical="2dp"
+        android:paddingLeft="5dp"
+        android:paddingRight="10dp"
+        android:src="@android:drawable/ic_menu_my_calendar" />
 </LinearLayout>

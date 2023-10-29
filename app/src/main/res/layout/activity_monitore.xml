@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/genericLinearLayout"
+    android:orientation="vertical"
+    tools:context=".Monitore">
+
+    <TextView
+        style="@style/perfilCampo_titulo"
+        android:text="@string/tituloHistorico"/>
+
+    <TextView
+        android:id="@+id/monitore_avisoHistoricoVazio"
+        android:text="@string/avisoHistoricoVazio"
+        style="@style/aviso_oculto" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/monitore_RViewHistorico"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+</LinearLayout>

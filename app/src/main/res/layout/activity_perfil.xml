@@ -1,22 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    style="@style/genericLinearLayout"
     android:orientation="vertical"
-    android:layout_margin="16dp"
     tools:context=".Perfil">
 
 
     <TextView
-        android:id="@+id/tituloPerfil"
         style="@style/tituloActivity"
+        android:paddingStart="20dp"
+        android:paddingEnd="0dp"
         android:text="@string/tituloPerfil" />
 
-    <TextView
-        android:id="@+id/perfilUsuario"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="TextView" />
+    <include
+        android:id="@+id/layoutPerfil_nome"
+        layout="@layout/perfil_campo"/>
 
+
+    <include
+        android:id="@+id/layoutPerfil_datanasc"
+        layout="@layout/perfil_campo" />
+
+
+    <include
+        android:id="@+id/layoutPerfil_sexo"
+        layout="@layout/perfil_campo"/>
+
+    <include
+        android:id="@+id/layoutPerfil_email"
+        layout="@layout/perfil_campo"/>
+
+    <include
+        android:id="@+id/layoutPerfil_datacadastro"
+        layout="@layout/perfil_campo" />
 </LinearLayout>

@@ -1,4 +1,4 @@
-package com.example.fitnessapp.Cadastro_Classes;
+package com.example.fitnessapp.CadastroClasses;
 
 import java.util.ArrayList;
 

@@ -17,6 +17,7 @@
             android:id="@+id/addspinnerID"
             android:background="@drawable/addspinner_field"
 
+            android:textColor="@color/p3"
             android:paddingTop="5dp"
             android:layout_width="0dp"
             android:layout_height="match_parent"

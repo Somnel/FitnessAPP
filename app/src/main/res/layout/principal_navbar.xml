@@ -6,27 +6,30 @@
     android:gravity="center">
 
     <Button
-        android:id="@+id/button"
-        style="@style/navbarPrincipal"
-        android:text="Button" />
+        android:id="@+id/button1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:background="@color/p1"
+        android:text="@string/placeholderText" />
 
     <Button
         android:id="@+id/button2"
         style="@style/navbarPrincipal"
-        android:text="Button" />
+        android:text="@string/placeholderText" />
 
     <Button
         android:id="@+id/button3"
         style="@style/navbarPrincipal"
-        android:text="Button" />
+        android:text="@string/placeholderText" />
 
     <Button
         android:id="@+id/button4"
         style="@style/navbarPrincipal"
-        android:text="Button" />
+        android:text="@string/placeholderText" />
 
     <Button
         android:id="@+id/button5"
         style="@style/navbarPrincipal"
-        android:text="Button" />
+        android:text="@string/placeholderText" />
 </LinearLayout>

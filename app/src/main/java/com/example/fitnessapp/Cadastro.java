@@ -18,8 +18,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.fitnessapp.Cadastro_Classes.AddSpinner;
-import com.example.fitnessapp.Cadastro_Classes.CampoData;
+import com.example.fitnessapp.CadastroClasses.AddSpinner;
+import com.example.fitnessapp.CadastroClasses.CampoData;
 import com.example.fitnessapp.db.classes.Usuario;
 import com.example.fitnessapp.db.classes.UsuarioSession;
 
@@ -106,7 +106,8 @@ public class Cadastro extends AppCompatActivity {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 final String separador = ":";
-                final int horas = progress * 30;
+                final int minsPAdicao = 30;
+                final int horas = minsPAdicao + progress * minsPAdicao;
                 final int minutos = (horas % 60);
                 cadastroDisponibilidadeText.setText(String.format("%d%s%s", progress > 0 ? horas / 60 : 0, separador, minutos == 0 ? "00" : minutos));
             }
@@ -139,6 +140,7 @@ public class Cadastro extends AppCompatActivity {
         LinearLayout date = findViewById(R.id.cadastroDate);
         cadastroDatanasc = new CampoData(getSupportFragmentManager(), date.findViewById(R.id.dateText), date.findViewById(R.id.dateBtn));
 
+
         // Spinners
         cadastroExercicioRealizado = createAddSpinner(findViewById(R.id.cadastroExercsRealizados), R.array.ExercRealizado);
         cadastroFocoTreino = createAddSpinner(findViewById(R.id.cadastroFoco), R.array.FocoTreino);
@@ -146,7 +148,7 @@ public class Cadastro extends AppCompatActivity {
 
         // init-txtHelpers
         cadastroDisponibilidadeText = findViewById(R.id.textHelperDisponibilidade);
-            cadastroDisponibilidadeText.setText("00:00");
+            cadastroDisponibilidadeText.setText("00:30");
             cadastroDisponibilidade.setProgress(0);
 
         cadastroFreqExerciciosText = findViewById(R.id.textHelperFreqExerc);
@@ -196,7 +198,7 @@ public class Cadastro extends AppCompatActivity {
                 usuario.setSexo(cadastroSexo.getCheckedRadioButtonId() == R.id.cadastroMasc ? 'M' : 'F');
                 usuario.setCondicao(cadastroFreqExerciciosText.getText().toString());
 
-                usuario.setFoco(cadastroFocoTreino.getSelectedItens());
+                usuario.setFoco(cadastroFocoTreino.reachSizeLista() ? null : cadastroFocoTreino.getSelectedItem());
                 usuario.setExercsRealizados(cadastroExercicioRealizado.getSelectedItens());
                 usuario.setObjetivos(cadastroObjetivo.getSelectedItens());
 

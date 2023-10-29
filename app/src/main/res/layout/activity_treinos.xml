@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/genericLinearLayout"
+    android:orientation="vertical"
+    tools:context=".Treinos">
+
+    <TextView
+        style="@style/tituloActivity"
+
+        android:gravity="center"
+        android:text="@string/tituloTreinos" />
+
+    <TextView
+        android:id="@+id/treinos_aviso"
+        style="@style/aviso_oculto"
+        android:text="@string/treinosAviso_completo" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/treinos_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+</LinearLayout>

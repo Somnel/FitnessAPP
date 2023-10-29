@@ -34,12 +34,9 @@ public class ListaExercicios {
         // > BUSCAR LISTA NO BANCO
         int condicao = Integer.parseInt(String.valueOf(convert.convertCondicao(usuario.getCondicao())));
         char intensidade = condicao < 3 ? '0' : (condicao < 5 ? '1' : '2');
-        List<HistoricoExercicio> histExercs = dao.buscarHistorico(usuario.getID());
-        List<Exercicio> lista = dao.buscar(intensidade, usuario.getDisponibilidade());
+        List<HistoricoExercicio> histExercs = dao.buscarHistorico(usuario.getID(), 1);
+        List<Exercicio> lista = dao.buscar(intensidade, usuario.getDisponibilidade(), usuario.getFoco(), usuario.getObjetivos());
 
-        // > SEPARAR POR FOCO
-
-        // > SEPARAR POR OBJETIVO
 
         // > REMOVER INVÁLIDOS
         for (HistoricoExercicio hist : histExercs) {
@@ -74,9 +71,10 @@ public class ListaExercicios {
         final LocalDate hoje = LocalDate.now();
         final int idUsuario = UsuarioSession.getInstance(context).getUsuario().getID();
 
-        if(!histExercicios.get(idUsuario).getDate().equals(hoje))
-            create(context);
+        if(histExercicios.get(idUsuario).getDate().equals(hoje))
+            return Objects.requireNonNull(histExercicios.get(idUsuario)).getExercicios();
 
+        create(context);
         return Objects.requireNonNull(histExercicios.get(idUsuario)).getExercicios();
     }
 

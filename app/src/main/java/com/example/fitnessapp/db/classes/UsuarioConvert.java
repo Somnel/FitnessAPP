@@ -45,8 +45,17 @@ public class UsuarioConvert {
 
 
 
+    public Character getFoco(String foco) {
+        switch (foco) {
+            case "Superiores": return 'A';
+            case "Inferiores": return 'B';
+            default: return null;
+        }
+    }
+
     // FOCO
-    public char convertFoco(String foco) throws Exception {
+    public Character convertFoco(String foco) throws Exception {
+        if(foco == null) return null;
         switch(foco) {
             case "Superiores": return '0';
             case "Inferiores": return '1';

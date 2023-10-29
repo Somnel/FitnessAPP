@@ -84,25 +84,14 @@ public class UsuarioSession {
                     usuario.setCondicao( convert.convertCondicao(verify.getString(verify.getColumnIndex("usu_condicao")).charAt(0)) );
 
 
-
+                usuario.setFoco( convert.convertFoco( verify.getString( verify.getColumnIndex("usu_foco") ).charAt(0) ) );
                 usuario.setDatanasc(LocalDate.parse( verify.getString(verify.getColumnIndex("usu_datanasc")), format));
+                usuario.setDatacadastro( LocalDate.parse( verify.getString( verify.getColumnIndex("usu_datacadastro") ), format ) );
 
                 // Multivalorados
                 String[] idStr = {String.valueOf(usuario.getID())};
                 String selecao2 = "idUsuario = ?";
 
-                // > Foco
-                try (Cursor verify2 = database.query("tbUsuarioFoco", null, selecao2 , idStr, null, null, null)) {
-                    if(verify2.moveToFirst()) {
-                        ArrayList<String> focos = new ArrayList<>();
-
-                        while(verify2.moveToNext()) {
-                            focos.add( convert.convertFoco(verify2.getString(verify2.getColumnIndex("focoTipo")).charAt(0)));
-                        }
-
-                        usuario.setFoco(focos);
-                    }
-                }
 
                 // > Exercicio Realizado
                 try (Cursor verify2 = database.query("tbUsuarioExercsRealizado", null, selecao2 , idStr, null, null, null)) {
@@ -161,18 +150,22 @@ public class UsuarioSession {
         try {
             database.beginTransaction();
             UsuarioConvert convert = new UsuarioConvert();
+            final DateTimeFormatter formatDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            final DateTimeFormatter formatTime = DateTimeFormatter.ofPattern("HH:mm:ss");
 
             ContentValues values = new ContentValues();
+                values.put("usu_datacadastro", LocalDate.now().format(formatDate) );
                 // Dados de segurança e identificação
                 values.put("usu_nome", usuario.getNome());
                 values.put("usu_email", usuario.getEmail());
                 values.put("usu_senha", senha);
-                values.put("usu_datanasc", usuario.getDatanasc().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
+                values.put("usu_datanasc", usuario.getDatanasc().format(formatDate));
                 values.put("usu_sexo", String.valueOf(usuario.getSexo()));
 
                 // Dados de restrição
                 values.put("usu_condicao", String.valueOf( convert.convertCondicao(usuario.getCondicao())));
-                values.put("usu_tempoDisponivel", usuario.getDisponibilidade().format(DateTimeFormatter.ofPattern("HH:mm:ss")));
+                values.put("usu_tempoDisponivel", usuario.getDisponibilidade().format(formatTime));
+                values.put("usu_foco", String.valueOf( convert.convertFoco( usuario.getFoco() ) ));
 
             final long ID = database.insert(tabela, null, values);
 
@@ -189,25 +182,6 @@ public class UsuarioSession {
                 }
             }
 
-
-            // > FOCO
-            if(!usuario.getFoco().isEmpty()) {
-                if(usuario.getFoco().size() == 2) {
-                    ContentValues values2 = new ContentValues();
-                    values2.put("idUsuario", ID);
-                    values2.put("focoTipo", "2");
-
-                    database.insert("tbUsuarioFoco", null, values2);
-                } else {
-                    for(String foco : usuario.getFoco()) {
-                        ContentValues values2 = new ContentValues();
-                        values2.put("idUsuario", ID);
-                        values2.put("focoTipo", String.valueOf( convert.convertFoco(foco) ));
-
-                        database.insert("tbUsuarioFoco", null, values2);
-                    }
-                }
-            }
 
 
             // > OBJETIVOS
@@ -234,6 +208,5 @@ public class UsuarioSession {
             database.endTransaction();
         }
     }
-
 
 }

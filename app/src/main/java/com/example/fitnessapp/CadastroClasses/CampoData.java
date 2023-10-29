@@ -1,10 +1,10 @@
-package com.example.fitnessapp.Cadastro_Classes;
+package com.example.fitnessapp.CadastroClasses;
 
 import android.annotation.SuppressLint;
 import android.os.Build;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.RequiresApi;
@@ -23,9 +23,10 @@ public class CampoData implements android.app.DatePickerDialog.OnDateSetListener
 
 
     @SuppressLint("SetTextI18n")
-    public CampoData(FragmentManager fragmentManager, TextView dataTexto, Button dataPicker) {
+    public CampoData(FragmentManager fragmentManager, TextView dataTexto, ImageButton dataPicker) {
         this.dataTexto = dataTexto;
         dataTexto.setText("20/10/2020");
+
 
 
         dataPicker.setOnClickListener(new View.OnClickListener() {

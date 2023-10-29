@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class sql extends SQLiteOpenHelper {
 
     private final static String db_nome = "Fitoff";
-    private final static int db_versao = 2;
+    private final static int db_versao = 4;
 
     public sql(Context contexto) {
         super(contexto, db_nome, null, db_versao);
@@ -25,6 +25,7 @@ public class sql extends SQLiteOpenHelper {
                 +", exerc_tipo CHAR(1)  NOT NULL" // Tipo 0 : fisico 1 : cognitivo
                 +", exerc_duracao TIME  NOT NULL"
                 +", exerc_intensidade CHAR(1)  NOT NULL" // 0 : Baixa 1 : Média 2 : Alta
+                +", exerc_iscronometrado CHAR(1) DEFAULT '0'" // 0 ou 1 : Boolean
                 +", exerc_limite INTEGER NOT NULL DEFAULT 0)");
 
 
@@ -41,15 +42,15 @@ public class sql extends SQLiteOpenHelper {
                 +"exercclassIDExerc INTEGER NOT NULL"
                 +", exercClassificao VARCHAR(20) NOT NULL"
                 +", PRIMARY KEY(exercclassIDExerc, exercClassificao)"
-                +", FOREIGN KEY(exercclassIDExerc) REFERENCES tbExercicio(idExercicio))");
+                +", FOREIGN KEY(exercclassIDExerc) REFERENCES tbExercicio(idExercicio) ON DELETE CASCADE)");
 
         // Tabela de Grupo Muscular - Exericio
         db.execSQL("CREATE TABLE IF NOT EXISTS tbExercGPMuscular("
                 +"idExercicio INTEGER"
                 +", idGrupoMusc INTEGER"
-                +", FOREIGN KEY(idExercicio) REFERENCES tbExercicio(idExercicio)"
-                +", FOREIGN KEY(idGrupoMusc) REFERENCES tbGrupoMuscular(idGrupoMusc)"
-                +", PRIMARY KEY(idExercicio,idGrupoMusc))");
+                +", FOREIGN KEY(idExercicio) REFERENCES tbExercicio(idExercicio) ON DELETE CASCADE"
+                +", FOREIGN KEY(idGrupoMusc) REFERENCES tbGrupoMuscular(idGrupoMusc) "
+                +", PRIMARY KEY(idExercicio,idGrupoMusc) )");
 
         // Tabela de usuário
         db.execSQL("CREATE TABLE IF NOT EXISTS tbUsuario ("
@@ -58,15 +59,13 @@ public class sql extends SQLiteOpenHelper {
                 +", usu_senha VARCHAR(20)  NOT NULL"
                 +", usu_email VARCHAR(100) NOT NULL"
                 +", usu_datanasc DATE  NOT NULL"
+                +", usu_datacadastro DATE NOT NULL"
                 +", usu_sexo CHAR(1) NOT NULL"
                 +", usu_condicao CHAR(1)  NOT NULL" // 0 > 2 | 3 > 5 | 6 > 8
-                +", usu_tempoDisponivel TIME NOT NULL)");
+                +", usu_foco CHAR(1) " // 0 > "SUPERIORES" ; 1 > "INFERIORES"
+                +", usu_tempoDisponivel TIME NOT NULL"
+                +", usu_isAdmin char(1) DEFAULT '0')");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS tbUsuarioFoco ("
-                +"  idUsuario INTEGER NOT NULL"
-                +", focoTipo CHAR(1) NOT NULL" // 0 > "SUPERIORES" ; 1 > "INFERIORES" ; 2 > "AMBOS"
-                +", PRIMARY KEY(idUsuario, focoTipo)"
-                +", FOREIGN KEY(idUsuario) REFERENCES tbUsuario(idUsuario))");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS tbUsuarioExercsRealizado("
                 +"  idUsuario INTEGER NOT NULL"
@@ -93,7 +92,6 @@ public class sql extends SQLiteOpenHelper {
                 +", PRIMARY KEY(idHistExercs, idExercicio)"
                 +", FOREIGN KEY (idHistExercs) REFERENCES tbUsuarioHistorico(histIDList)"
                 +", FOREIGN KEY (idExercicio) REFERENCES tbExercicio(idExercicio))");
-
 
     }
 

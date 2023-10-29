@@ -5,15 +5,15 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
 import android.os.Build;
-import android.util.Log;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
 import com.example.fitnessapp.db.sql;
 
-import java.sql.Date;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -54,16 +54,28 @@ public class ExercicioDao {
                 exerc.setDuracao(LocalTime.parse(verify.getString(verify.getColumnIndex("exerc_duracao")), sqlFormat));
                 exerc.setIntensidade(verify.getString(verify.getColumnIndex("exerc_intensidade")).charAt(0));
                 exerc.setLimite_semanal(verify.getInt(verify.getColumnIndex("exerc_limite")));
+                exerc.setCronometrado(!verify.getString(verify.getColumnIndex("exerc_iscronometrado")).equals("0"));
 
                 try(Cursor verifyGPMuscular = database.query(gpmuscTabela, null, "idExercicio = ?", idExerc, null, null, null)){
                     if(verifyGPMuscular.moveToFirst()) {
-                        ArrayList<String> gpMusc = new ArrayList<>();
+                        ArrayList<GrupoMuscular> gpMusc = new ArrayList<>();
 
                         while (verifyGPMuscular.moveToNext()) {
+                            int idGpMusc = verifyGPMuscular.getInt( verifyGPMuscular.getColumnIndex("idGrupoMusc"));
+                            String[] idGPMuscular = new String[]{
+                                    String.valueOf(idGpMusc)
+                            };
 
-                            String[] idGPMuscular = new String[]{verifyGPMuscular.getString( verifyGPMuscular.getColumnIndex("idGrupoMusc") )};
+
                             try(Cursor verifyGPMuscular_Nome = database.query("tbGrupoMuscular", null, "idGrupoMusc = ?", idGPMuscular, null, null, null)) {
-                                gpMusc.add( verifyGPMuscular_Nome.getString( verifyGPMuscular_Nome.getColumnIndex("Musculo") ) );
+                                GrupoMuscular gp = new GrupoMuscular();
+
+                                gp.setMusculo( verifyGPMuscular_Nome.getString( verifyGPMuscular_Nome.getColumnIndex("Musculo") ) );
+                                gp.setID(idGpMusc);
+
+                                gp.setGrupo( verifyGPMuscular_Nome.getString( verifyGPMuscular_Nome.getColumnIndex("Grupo_muscular") ).charAt(0) );
+
+                                gpMusc.add(gp);
                             }
 
                         }
@@ -96,59 +108,75 @@ public class ExercicioDao {
     }
 
     @SuppressLint("Range")
-    public List<Exercicio> buscar(char intensidade, LocalTime duracao_limite) {
+    public List<Exercicio> buscar(char intensidade, LocalTime duracao_limite, String foco, ArrayList<String> objetivo)  {
 
-        ArrayList<Exercicio> listExercs = new ArrayList<>();
-        String selecao = "exerc_intensidade = ? AND exerc_duracao < ?";
-        String[] selecaoArgs = {String.valueOf(intensidade), duracao_limite.format(sqlFormat)};
+        ArrayList<Exercicio> retorno = new ArrayList<>();
+        UsuarioConvert convert = new UsuarioConvert();
 
-        try(Cursor verify = database.query(tabela, null, selecao, selecaoArgs, null, null, null)) {
+        StringBuilder queryBuilder = new StringBuilder();
+        queryBuilder.append("SELECT tbExercicio.* FROM tbExercicio ");
+        queryBuilder.append("INNER JOIN tbExercGPMuscular ON tbExercicio.idExercicio = tbExercGPMuscular.idExercicio ");
+        queryBuilder.append("INNER JOIN tbGrupoMuscular ON tbExercGPMuscular.idGrupoMusc = tbGrupoMuscular.idGrupoMusc ");
+        queryBuilder.append("WHERE tbExercicio.exerc_intensidade = ?");
 
-            while (verify.moveToNext()) {
-                listExercs.add( buscar( verify.getInt( verify.getColumnIndex("idExercicio") ) ) );
+
+
+        ArrayList<String> sqlQueryArgs = new ArrayList<>();
+        sqlQueryArgs.add(String.valueOf(intensidade));
+
+        // Duracao - SE NULL
+        if(duracao_limite != null) {
+            String duracaoSQL = "AND tbExercicio.exerc_duracao < ? ";
+            sqlQueryArgs.add(duracao_limite.format(sqlFormat));
+            queryBuilder.append(duracaoSQL);
+        }
+
+        // Foco - SE NULL
+        if(!TextUtils.isEmpty(foco)) {
+            String focoConvertido = String.valueOf( convert.getFoco( foco ) );
+            String focoSQL = (!TextUtils.isEmpty(focoConvertido) ?  " AND tbGrupoMuscular.Grupo_muscular = ?" : "");
+
+            sqlQueryArgs.add(focoConvertido);
+            queryBuilder.append(focoSQL);
+        }
+
+        String sqlQuery = queryBuilder.toString();
+
+        try (Cursor query = database.rawQuery(sqlQuery, sqlQueryArgs.toArray(new String[0]))) {
+            while (query.moveToNext()) {
+                retorno.add( buscar( query.getInt( query.getColumnIndex( "idExercicio" ) ) ) );
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return listExercs;
+        return retorno;
     }
 
 
-    @SuppressLint("Range")
-    private List<Integer> buscar_gpmuscular(@NonNull String[] nomesMusculos) {
-        ArrayList<Integer> ids = new ArrayList<>();
-        try(Cursor verify = database.query("tbGrupoMuscular", new String[]{"idGrupoMusc"}, "Musculo = ?", nomesMusculos, null, null, null)){
-           while(verify.moveToNext()) {
-                ids.add(verify.getInt(verify.getColumnIndex("idGrupoMusc")));
-           }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return ids;
-    }
+
 
     @SuppressLint("Range")
-    public void adicionar(@NonNull Exercicio exerc) {
-        List<Integer> ids_gpMuscular = buscar_gpmuscular(exerc.getMusculos().toArray(new String[0]));
-
-        if(ids_gpMuscular == null || ids_gpMuscular.isEmpty()) {
-            Log.d("Exceção", "Grupo muscular invalido");
-            return;
-        }
+    public void adicionar(Context context, @NonNull Exercicio exerc, Bitmap imgExerc) {
 
         try{
             database.beginTransaction();
 
             ContentValues values = new ContentValues();
                 values.put("exerc_nome", exerc.getNome());
-                values.put("exerc_illu", exerc.getIllustracao());
                 values.put("exerc_desc", exerc.getDescricao());
                 values.put("exerc_tipo", String.valueOf(exerc.getTipo()));
                 values.put("exerc_duracao", exerc.getDuracao().format(sqlFormat));
                 values.put("exerc_intensidade", String.valueOf(exerc.getIntensidade()));
                 values.put("exerc_limite", exerc.getLimite_semanal());
+
+
+            if(!exerc.getIllustracao().isEmpty()) {
+                String imgRef = exerc.getNome().toLowerCase().trim();
+                if(ExecicioIlustracaoDao.salvarIlustracao(context, imgExerc, imgRef)) {
+                    values.put("exerc_illu", imgRef);
+                }
+            }
 
             long rs = database.insert(tabela, null, values);
 
@@ -157,15 +185,16 @@ public class ExercicioDao {
                 final String tabelaGPMuscExecs = "tbExercGPMuscular";
                 final String tabelaGPMusc = "tbGrupoMuscular";
 
-                for(String musculo : exerc.getMusculos()) {
+                for(GrupoMuscular musculo : exerc.getMusculos()) {
                     long idGpMusc;
 
-                    try(Cursor verifyMusculo = database.query(tabelaGPMusc, new String[]{"idGrupoMusc"}, "Musculo = ?", new String[]{musculo}, null, null, null)) {
+                    try(Cursor verifyMusculo = database.query(tabelaGPMusc, new String[]{"idGrupoMusc"}, "Musculo = ?", new String[]{musculo.getMusculo()}, null, null, null)) {
                         if(verifyMusculo.moveToFirst()) {
                             idGpMusc = verifyMusculo.getInt( verifyMusculo.getColumnIndex("idGrupoMusc") );
                         } else {
                             ContentValues musculoValues = new ContentValues();
-                            musculoValues.put("Grupo_muscular", musculo);
+                            musculoValues.put("Musculo", musculo.getMusculo());
+                            musculoValues.put("Grupo_muscular", String.valueOf(musculo.getGrupo()));
                             idGpMusc = database.insert(tabelaGPMusc, null, musculoValues);
                         }
                     }
@@ -198,31 +227,21 @@ public class ExercicioDao {
     }
 
 
-    public void alterar(Exercicio exerc) {
-        try{
-            ContentValues values = new ContentValues();
-                values.put("exerc_nome", exerc.getNome());
-                values.put("exerc_illu", exerc.getIllustracao());
-                values.put("exerc_desc", exerc.getDescricao());
-                values.put("exerc_tipo", String.valueOf(exerc.getTipo()));
-                values.put("exerc_duracao", exerc.getDuracao().format(sqlFormat));
-                values.put("exerc_intensidade", String.valueOf(exerc.getIntensidade()));
-                values.put("exerc_limite", exerc.getLimite_semanal());
-
-            database.update(tabela, values,"idExercicio = ?", new String[]{String.valueOf(exerc.getID())});
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public boolean remover(int idExercicio) {
+        database.beginTransaction();
         try{
-            int rs = database.delete(tabela, "idExercicio = ?", new String[]{String.valueOf(idExercicio)});
-            return rs > 0;
+            int res = database.delete(tabela, "idExercicio = ?", new String[]{String.valueOf(idExercicio)});
+            if(res > 0) {
+                database.setTransactionSuccessful();
+                return true;
+            }
         } catch(Exception e) {
             e.printStackTrace();
-            return false;
+        } finally {
+            database.endTransaction();
         }
+        return false;
     }
 
 
@@ -253,18 +272,24 @@ public class ExercicioDao {
         }
     }
 
+
+
+
+
+
     @SuppressLint("Range")
-    public List<HistoricoExercicio> buscarHistorico(int idUsuario) {
+    public List<HistoricoExercicio> buscarHistorico(int idUsuario, int reduzSemanas) {
         final LocalDate lcdate = LocalDate.now();
         ArrayList<HistoricoExercicio> historicoExercicios = new ArrayList<>();
 
         final String[] args = {
                 String.valueOf(idUsuario),
-                String.valueOf(LocalDate.parse(String.valueOf(lcdate.minusWeeks(1)), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
+                String.valueOf(LocalDate.parse(String.valueOf(lcdate.minusWeeks(reduzSemanas)), DateTimeFormatter.ofPattern("yyyy-MM-dd")))
         };
 
+        database.beginTransaction();
         try(Cursor verify = database.query(tabela, null, "idUsuario = ? AND histData < ?", args, null, null, null)) {
-            database.beginTransaction();
+
 
             if(verify.moveToFirst()) {
                 // > IDS do Histórico
@@ -291,16 +316,18 @@ public class ExercicioDao {
                     // ---
                 }
             }
+            database.setTransactionSuccessful();
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             database.endTransaction();
-            return historicoExercicios;
         }
+        
+        return historicoExercicios;
     }
 
     @SuppressLint("Range")
-    public char buscarMusculoFoco(String foco) {
+    public Character buscarMusculoFoco(String foco) {
         final String tabela = "tbGrupoMuscular";
         final String[] column = {"Grupo_muscular"};
         String[] musc = {foco};

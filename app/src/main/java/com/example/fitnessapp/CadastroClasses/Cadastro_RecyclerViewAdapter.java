@@ -1,4 +1,4 @@
-package com.example.fitnessapp.Cadastro_Classes;
+package com.example.fitnessapp.CadastroClasses;
 
 import android.content.Context;
 import android.view.LayoutInflater;
