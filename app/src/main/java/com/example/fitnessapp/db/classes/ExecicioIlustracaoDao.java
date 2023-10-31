@@ -3,9 +3,13 @@ package com.example.fitnessapp.db.classes;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.widget.ImageView;
+
+import com.bumptech.glide.Glide;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+
 
 public class ExecicioIlustracaoDao {
 
@@ -24,18 +28,29 @@ public class ExecicioIlustracaoDao {
         return false;
     }
 
-    public static Bitmap buscarIlustracao(Context context, String imgRefer) {
-
-        // Carregue a imagem do diretório privado da aplicação.
-        FileInputStream fileInputStream;
-        try {
-            fileInputStream = context.openFileInput(imgRefer);
-            return BitmapFactory.decodeStream(fileInputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
+    public static void buscarIlustracao(Context context, String imgRefer, ImageView imageView) {
+        if(imgRefer.endsWith(".png")) {
+            FileInputStream fileInputStream;
+            try {
+                fileInputStream = context.openFileInput(imgRefer);
+                imageView.setImageBitmap(BitmapFactory.decodeStream(fileInputStream));
+                return ;
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
-        return null;
+        if(imgRefer.endsWith(".gif")) {
+            try {
+                // Use o Glide para carregar o GIF animado e exibi-lo na ImageView.
+                Glide.with(context)
+                        .asGif() // Indique que estamos carregando um GIF animado.
+                        .load(context.openFileInput(imgRefer))
+                        .into(imageView);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public static boolean removerIlustracao(Context context, String fileName) {

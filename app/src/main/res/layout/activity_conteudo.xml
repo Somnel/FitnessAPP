@@ -10,6 +10,16 @@
         style="@style/perfilCampo_titulo"
         android:text="@string/tituloConteudo"/>
 
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <VideoView
+            android:id="@+id/conteudo_videoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </FrameLayout>
+
     <TextView
         android:id="@+id/textView"
         style="@style/aviso_oculto"
@@ -19,4 +29,5 @@
         android:id="@+id/conteudo_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

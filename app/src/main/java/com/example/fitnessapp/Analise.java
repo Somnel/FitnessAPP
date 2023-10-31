@@ -21,7 +21,7 @@ import java.util.List;
 
 public class Analise extends AppCompatActivity {
 
-    private final List<String> xValues = Arrays.asList("Maths", "Science", "English", "IT");
+    private final List<String> xValues = Arrays.asList("31/10/2023", "01/11/2023", "02/11/2023", "03/11/2023");
 
     @Override
     public void onBackPressed() {
@@ -48,9 +48,9 @@ public class Analise extends AppCompatActivity {
 
         ArrayList<BarEntry> entries = new ArrayList<>();
         entries.add(new BarEntry(0, 45f));
-        entries.add(new BarEntry(1, 80f));
-        entries.add(new BarEntry(2, 68f));
-        entries.add(new BarEntry(3, 38f));
+        entries.add(new BarEntry(1, 48f));
+        entries.add(new BarEntry(2, 60f));
+        entries.add(new BarEntry(3, 58f));
 
         YAxis yAxis = analiseChart.getAxisLeft();
         yAxis.setAxisMaximum(0f);
@@ -58,7 +58,7 @@ public class Analise extends AppCompatActivity {
         yAxis.setAxisLineWidth(2f);
         yAxis.setAxisLineColor(Color.BLACK);
 
-        BarDataSet dataSet = new BarDataSet(entries, "Subjects");
+        BarDataSet dataSet = new BarDataSet(entries, "Dias");
         dataSet.setColors(ColorTemplate.MATERIAL_COLORS);
 
         BarData barData = new BarData(dataSet);

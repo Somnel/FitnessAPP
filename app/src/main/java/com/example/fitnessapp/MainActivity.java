@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
@@ -29,11 +30,13 @@ public class MainActivity extends AppCompatActivity {
     private Class login_redirect;
 
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         init();
+
 
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.p3));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.p3));

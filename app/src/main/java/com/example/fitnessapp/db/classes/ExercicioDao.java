@@ -170,13 +170,13 @@ public class ExercicioDao {
                 values.put("exerc_intensidade", String.valueOf(exerc.getIntensidade()));
                 values.put("exerc_limite", exerc.getLimite_semanal());
 
-
-            if(!exerc.getIllustracao().isEmpty()) {
+            values.put("exerc_illu", exerc.getIllustracao());
+            /*if(!exerc.getIllustracao().isEmpty()) {
                 String imgRef = exerc.getNome().toLowerCase().trim();
                 if(ExecicioIlustracaoDao.salvarIlustracao(context, imgExerc, imgRef)) {
                     values.put("exerc_illu", imgRef);
                 }
-            }
+            }*/
 
             long rs = database.insert(tabela, null, values);
 

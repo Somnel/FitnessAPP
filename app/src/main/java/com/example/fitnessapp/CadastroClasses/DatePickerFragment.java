@@ -10,7 +10,6 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
 import java.util.Calendar;
-import java.util.Objects;
 
 public class DatePickerFragment extends DialogFragment {
     private DatePickerDialog.OnDateSetListener onDateSetListener;

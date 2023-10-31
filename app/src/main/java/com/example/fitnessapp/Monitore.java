@@ -17,6 +17,7 @@ import com.example.fitnessapp.db.classes.ExercicioDao;
 import com.example.fitnessapp.db.classes.HistoricoExercicio;
 import com.example.fitnessapp.db.classes.UsuarioSession;
 
+import java.time.LocalDate;
 import java.util.List;
 
 public class Monitore extends AppCompatActivity {
@@ -44,7 +45,10 @@ public class Monitore extends AppCompatActivity {
         int idUsuario = UsuarioSession.getInstance(this).getUsuario().getID();
         ExercicioDao dao = new ExercicioDao(this);
 
+        HistoricoExercicio staticHistorico = new HistoricoExercicio(LocalDate.now(), Treinos.setExercicioStatic());
         List<HistoricoExercicio> historico = dao.buscarHistorico(idUsuario, 0);
+        historico.add(staticHistorico);
+
         if(!historico.isEmpty()) {
             RecyclerView recyclerView = findViewById(R.id.monitore_RViewHistorico);
             Monitore_RecyclerViewAdapter adapter = new Monitore_RecyclerViewAdapter(this, historico);
@@ -55,8 +59,5 @@ public class Monitore extends AppCompatActivity {
             aviso.getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
             aviso.setVisibility(View.VISIBLE);
         }
-
-
-
     }
 }

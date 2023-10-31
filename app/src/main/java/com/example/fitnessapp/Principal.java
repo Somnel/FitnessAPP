@@ -1,7 +1,5 @@
 package com.example.fitnessapp;
 
-import static com.example.fitnessapp.db.ListaExercicios.getListaExercicios;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -9,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +17,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.fitnessapp.db.classes.UsuarioSession;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Principal extends AppCompatActivity {
 
@@ -88,29 +90,31 @@ public class Principal extends AppCompatActivity {
         perfilText = findViewById(R.id.btnPerfil);
         configText = findViewById(R.id.btnConfig);
         layout = findViewById(R.id.principal_bottomnav);
+        TextView txtProgress = findViewById(R.id.Principal_progressBar_text);
+        TextView txtProgressDate = findViewById(R.id.Principal_progressBar_text_date);
 
-        try {
-            getListaExercicios(this);
-        } catch (Exception e) {
-            e.printStackTrace();
-            Toast.makeText(this,"Lista de Exercicios inválido " + e, Toast.LENGTH_LONG).show();
-        }
+        txtProgressDate.setText( LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) );
+        txtProgress.setText("AINDA NÃO CONCLUIDO");
 
-
-
-        defbottomnavbar(R.id.button1, "Meus Treinos", Treinos.class);
-        defbottomnavbar(R.id.button2, "Minhas Atividades", Atividades.class);
-        defbottomnavbar(R.id.button3, "Monitore", Monitore.class);
-        defbottomnavbar(R.id.button4, "Análise", Analise.class);
-        defbottomnavbar(R.id.button5, "Conteúdo", Conteudo.class);
+        defbottomnavbar(R.id.principal_nav_item1, R.drawable.icontreino,  "Meus Treinos", Treinos.class);
+        defbottomnavbar(R.id.principal_nav_item2, R.drawable.iconeatividade, "Minhas Atividades", Atividades.class);
+        defbottomnavbar(R.id.principal_nav_item3, R.drawable.iconemonitore, "Monitore", Monitore.class);
+        defbottomnavbar(R.id.principal_nav_item4, R.drawable.iconeanalise, "Análise", Analise.class);
+        defbottomnavbar(R.id.principal_nav_item5, R.drawable.iconeconteudo, "Conteúdo", Conteudo.class);
     }
 
-    private void defbottomnavbar(int viewById, String meusTreinos, Class pag) {
+    private void defbottomnavbar(int layoutID, int imageID_draw, String meusTreinos, Class pag) {
         Context context = this;
-        Button btn = layout.findViewById(viewById);
-        btn.setText(meusTreinos);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        LinearLayout layout = findViewById(layoutID);
+
+        TextView text = layout.findViewById(R.id.principal_nav_text);
+        text.setText(meusTreinos);
+
+        ImageView img = layout.findViewById(R.id.principal_nav_image);
+        img.setImageResource(imageID_draw);
+
+        layout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, pag);

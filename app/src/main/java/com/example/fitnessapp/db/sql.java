@@ -8,6 +8,7 @@ public class sql extends SQLiteOpenHelper {
 
     private final static String db_nome = "Fitoff";
     private final static int db_versao = 4;
+    private static boolean valoresTestes;
 
     public sql(Context contexto) {
         super(contexto, db_nome, null, db_versao);

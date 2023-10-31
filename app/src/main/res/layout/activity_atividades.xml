@@ -18,8 +18,36 @@
         style="@style/aviso_oculto"
         android:text="@string/treinosAviso_completo" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/atividades_recyclerview"
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:paddingVertical="20dp"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include
+                android:id="@+id/atividades_row1"
+                layout="@layout/exercicio_row" />
+
+            <include
+                android:id="@+id/atividades_row2"
+                layout="@layout/exercicio_row" />
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <Button
+        android:id="@+id/atividades_btnExercs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:background="@drawable/btn_padrao"
+        android:paddingVertical="16dp"
+        android:text="Começar" />
 </LinearLayout>

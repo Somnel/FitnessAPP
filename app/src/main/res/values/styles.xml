@@ -16,14 +16,25 @@
         <item name="colorTertiary">@color/p3</item>
         <item name="colorOnBackground">@color/p2</item>
     </style>
-    
-    
+
+
+
+    <style name="genericCampoText" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="android:textColorHint">@color/p1</item>
+        <item name="boxBackgroundColor">@color/background</item>
+        <item name="boxStrokeColor">@color/p4</item>
+        <item name="android:layout_marginBottom">@dimen/Cadastro_distanciamento</item>
+    </style>
+    <style name="genericCampoText.field">
+        <item name="android:textColor">@color/p3</item>
+    </style>
+
 
     <style name="editText" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">300dp</item>
         <item name="android:layout_height">60dp</item>
         <item name="android:ems">10</item>
-        <item name="android:textColorHint">@color/hint</item>
+        <item name="android:textColorHint">@color/p1</item>
         <item name="android:textColor">@color/black</item>
     </style>
     <style name="clickableText">
@@ -50,8 +61,13 @@
         <item name="android:layout_height">match_parent</item>
         <item name="android:layout_weight">1</item>
     </style>
-    <style name="textviewPrincipal" parent="genericHorizontalLinear">
-        <item name="android:layout_margin">10dp</item>
+    <style name="genericVerticalLinear">
+        <item name="android:gravity">center</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0dp</item>
+        <item name="android:layout_weight">1</item>
+    </style>
+    <style name="textviewPrincipal" parent="genericVerticalLinear">
         <item name="android:textStyle">bold</item>
     </style>
     <style name="navbarPrincipal"  parent="genericHorizontalLinear">

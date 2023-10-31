@@ -1,11 +1,14 @@
 package com.example.fitnessapp;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.MediaController;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
@@ -30,6 +33,10 @@ public class Conteudo extends AppCompatActivity {
         finish();
     }
 
+
+
+
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +51,7 @@ public class Conteudo extends AppCompatActivity {
     private void init() {
         ExercicioDao dao = new ExercicioDao(this);
         ArrayList<Exercicio> exercicios = new ArrayList<>();
+
         TextView aviso = findViewById(R.id.monitore_avisoHistoricoVazio);
 
         try {
@@ -66,5 +74,17 @@ public class Conteudo extends AppCompatActivity {
             Conteudo_RecyclerViewAdapter adapter = new Conteudo_RecyclerViewAdapter(this, exercicios);
             recyclerView.setAdapter(adapter);
         }
+
+
+        VideoView videoView = findViewById(R.id.conteudo_videoView);
+        String videoPath = "android.resource://" + getPackageName() + "/" + R.raw.videoaula;
+        Uri uri = Uri.parse(videoPath);
+        videoView.setVideoURI(uri);
+
+        MediaController mediaController = new MediaController(this);
+        videoView.setMediaController(mediaController);
+        mediaController.setAnchorView(videoView);
     }
+
+
 }

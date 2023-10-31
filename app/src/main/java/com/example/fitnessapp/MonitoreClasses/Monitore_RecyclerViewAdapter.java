@@ -17,6 +17,7 @@ import com.example.fitnessapp.db.classes.HistoricoExercicio;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class Monitore_RecyclerViewAdapter extends RecyclerView.Adapter<Monitore_
 
     public Monitore_RecyclerViewAdapter(Context context, List<HistoricoExercicio> historico) {
         this.context = context;
+        this.historico = new HashMap<>();
 
         for(HistoricoExercicio hist : historico) {
             LocalDate tempDate = hist.getDate();
