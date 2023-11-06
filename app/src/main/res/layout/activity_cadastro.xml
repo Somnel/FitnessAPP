@@ -38,7 +38,7 @@
             style="@style/genericCampoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Nome">
+            android:hint="@string/hintNome">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cadastroNome"
@@ -59,13 +59,14 @@
             style="@style/genericCampoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Email">
+            android:hint="@string/hintEmail">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/cadastroEmail"
                 style="@style/genericCampoText.field"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -75,7 +76,7 @@
             style="@style/genericCampoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Senha"
+            android:hint="@string/hintSenha"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/p3">
 
@@ -93,7 +94,7 @@
             style="@style/genericCampoText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Confime a Senha"
+            android:hint="@string/hintConfirmSenha"
             app:endIconMode="password_toggle"
             app:endIconTint="@color/p3">
 
@@ -120,7 +121,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Homem"
+                android:text="@string/hintSexoHomem"
                 android:textColor="@color/p3" />
 
             <RadioButton
@@ -128,7 +129,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Mulher"
+                android:text="@string/hintSexoMulher"
                 android:textColor="@color/p3" />
 
         </RadioGroup>
@@ -140,8 +141,8 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="Frequência de Exercicios"
-            android:textSize="23dp" />
+            android:text="@string/txtFreqExercicio"
+            android:textSize="23sp" />
 
         <SeekBar
             android:id="@+id/sbarFreqExerc"
@@ -149,7 +150,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="4"
-            android:progress="0" />
+            android:progress="0"
+            android:progressBackgroundTint="@color/p4" />
 
         <TextView
             android:id="@+id/textHelperFreqExerc"
@@ -157,9 +159,9 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:gravity="center"
-            android:text="..."
+            android:text="@string/placeholderText"
 
-            android:textSize="20dp" />
+            android:textSize="20sp" />
 
         <TextView
             android:id="@+id/textDisponibilidade"
@@ -168,7 +170,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginBottom="10dp"
             android:gravity="center"
-            android:text="Disponibilidade"
+            android:text="@string/txtDisponibilidade"
             android:textSize="23sp" />
 
         <SeekBar
@@ -177,7 +179,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="7"
-            android:progress="0" />
+            android:progress="0"
+            android:progressBackgroundTint="@color/p4" />
 
         <TextView
             android:id="@+id/textHelperDisponibilidade"
@@ -185,7 +188,7 @@
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:gravity="center"
-            android:text="..."
+            android:text="@string/placeholderText"
 
             android:textSize="20sp" />
 
@@ -211,13 +214,13 @@
         android:gravity="center"
         android:layout_marginVertical="20dp">
 
-        <Button
-            android:background="@drawable/btn_padrao"
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/cadastroBtn"
             android:layout_width="200dp"
             android:layout_height="60dp"
-            android:textColor="@color/p2"
-            android:text="Cadastrar" />
+            android:background="@drawable/btn_padrao"
+            android:text="@string/btn_cadastrar"
+            android:textColor="@color/background" />
     </LinearLayout>
 
 </LinearLayout>

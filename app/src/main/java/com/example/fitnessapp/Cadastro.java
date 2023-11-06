@@ -174,6 +174,7 @@ public class Cadastro extends AppCompatActivity {
         }
 
 
+
         // Validação do cadastro
         if(!UsuarioSession.getInstance(this).isEmailFree(cadastroEmail.getText().toString())) {
             Toast.makeText(this, "Email já cadastrado", Toast.LENGTH_SHORT).show();

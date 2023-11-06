@@ -49,5 +49,6 @@
         android:layout_marginHorizontal="20dp"
         android:background="@drawable/btn_padrao"
         android:paddingVertical="16dp"
-        android:text="Começar" />
+        android:text="Começar"
+        android:textColor="@color/background" />
 </LinearLayout>

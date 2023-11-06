@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/p2"
-    android:layout_margin="16dp"
+    android:padding="16dp"
     android:orientation="vertical"
     tools:context=".Configuracoes">
 
@@ -26,7 +26,7 @@
             android:textColor="@color/p3"
             android:textSize="18sp" />
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/lembrete_btnAdd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -37,6 +37,7 @@
             android:text="Definir novo Lembrete" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lembrete_recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
@@ -50,7 +51,7 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="15sp"
 
@@ -60,13 +61,13 @@
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="20sp"
 
             android:textColor="@color/p3"
             android:gravity="center"
-            android:text="@string/txtProjetoNomes" />
+            android:text="@string/names" />
     </LinearLayout>
 
 

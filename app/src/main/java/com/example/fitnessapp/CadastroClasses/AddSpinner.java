@@ -40,7 +40,6 @@ public class AddSpinner implements CadastroInterface {
 
         updateSpinner();
 
-
         spinBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -75,16 +74,15 @@ public class AddSpinner implements CadastroInterface {
 
             viewAdapter.notifyItemInserted(listItensSelecionados.size());
             // -> Spinner
-            if(spin.getAdapter().getCount() != 0) {
-                spin.setEnabled(false);
+            if (spin.getAdapter().getCount() != 0) {
                 spin.setBackgroundResource(R.drawable.addspinner_field);
                 spinBtn.setBackgroundResource(R.drawable.addspinner_button);
             } else {
-                spin.setEnabled(true);
                 spin.setBackgroundResource(R.drawable.addspinner_field_disabled);
                 spinBtn.setBackgroundResource(R.drawable.addspinner_button_disabled);
             }
 
+            spin.setEnabled(true);
         } catch (Exception e) {
             Log.e("{Exceção em" + spin.toString(), String.valueOf(e));
         }

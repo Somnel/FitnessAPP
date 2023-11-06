@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="cornerradiusAddSpinner_r">10dp</dimen>
-    <dimen name="btn_sombraGrossura">2dp</dimen>
     <dimen name="Principal_dimenProgressbar">250dp</dimen>
     <dimen name="Cadastro_distanciamento">14dp</dimen>
+    <dimen name="thickness_progressbar">16dp</dimen>
 </resources>

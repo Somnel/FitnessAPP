@@ -52,7 +52,7 @@
                 app:layout_constraintStart_toEndOf="@+id/textView2"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageButton
+            <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/lembrete_row_removebtn"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -62,7 +62,8 @@
                 android:paddingHorizontal="10dp"
 
                 android:paddingVertical="5dp"
-                android:src="@android:drawable/ic_delete"
+                android:text="X"
+                android:textSize="25sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"

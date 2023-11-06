@@ -21,6 +21,17 @@
     <string name="tituloTreinos">Meus Treinos</string>
     <string name="tituloConteudo">CONTEÚDO</string>
     <string name="treinosAviso_completo">Treinos Completados</string>
-    <string name="treinosAviso_erro">Nenhum Exercício Registrado</string>
     <string name="tituloAtividades">Minhas Atividades</string>
+    <string name="hintNome">Nome</string>
+    <string name="hintEmail">Email</string>
+    <string name="hintSenha">Senha</string>
+    <string name="hintConfirmSenha">Confime a Senha</string>
+    <string name="hintSexoHomem">Homem</string>
+    <string name="hintSexoMulher">Mulher</string>
+    <string name="txtFreqExercicio">Frequência de Exercicios</string>
+    <string name="txtDisponibilidade">Disponibilidade</string>
+    <string name="btn_cadastrar">Cadastrar</string>
+    <string name="txtfield_Required">Obrigatório*</string>
+    <string name="names">Helena Rodriguez Tavares\nIsabelle Marie Miranda Nadas\nJulia Rodrigues Alves Mattos</string>
+    <string name="placeholderconteudo">Ler mais...</string>
 </resources>

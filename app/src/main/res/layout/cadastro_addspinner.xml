@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
+    android:background="@color/p2"
     android:layout_marginHorizontal="2dp"
     android:layout_marginVertical="10dp">
 
@@ -13,18 +14,18 @@
         android:layout_height="50dp"
         android:orientation="horizontal">
 
-        <Spinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/addspinnerID"
-            android:background="@drawable/addspinner_field"
-
-            android:textColor="@color/p3"
-            android:paddingTop="5dp"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="5"
-            android:layout_margin="0dp"/>
 
-        <Button
+            android:layout_height="match_parent"
+            android:layout_margin="0dp"
+            android:layout_weight="5"
+            android:background="@drawable/addspinner_field"
+            android:popupBackground="@color/background"
+            android:paddingTop="5dp" />
+
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnAddspinner"
 
             android:background="@drawable/addspinner_button"

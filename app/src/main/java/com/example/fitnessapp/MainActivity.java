@@ -37,7 +37,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         init();
 
-
         getWindow().setStatusBarColor(ContextCompat.getColor(this, R.color.p3));
         getWindow().setNavigationBarColor(ContextCompat.getColor(this, R.color.p3));
 

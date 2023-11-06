@@ -1,17 +1,12 @@
-<resources xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Base application theme. -->
     <style name="Base.Theme.FitnessApp" parent="Theme.MaterialComponents.NoActionBar">
         <item name="colorPrimary">@color/p4</item>
-        <item name="colorSecondary">@color/p3</item>
+        <item name="colorSecondary">@color/p2</item>
         <item name="colorTertiary">@color/p1</item>
         <item name="colorAccent">@color/p4</item>
 
-
-
         <item name="android:textColor">@color/p3</item>
-        <item name="hintTextColor">@color/p4</item>
-        <item name="android:textColorHint">@color/p1</item>
         <!-- Customize your light theme here. -->
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>

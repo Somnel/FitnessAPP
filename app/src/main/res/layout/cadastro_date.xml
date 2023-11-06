@@ -21,20 +21,22 @@
         android:id="@+id/dateText"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:textColor="@color/p3"
+        android:background="@drawable/addspinner_field"
         android:gravity="center"
         android:paddingHorizontal="45dp"
-        android:textSize="15sp"
-        android:text="@string/placeholderDate" />
+        android:text="@string/placeholderDate"
+        android:textColor="@color/p3"
+        android:textSize="15sp" />
 
     <ImageButton
         android:id="@+id/dateBtn"
-        android:background="@drawable/addspinner_button"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
+        android:background="@drawable/addspinner_button"
+        android:contentDescription="Datanasc"
         android:paddingVertical="2dp"
-        android:paddingLeft="5dp"
+        android:paddingLeft="10dp"
         android:paddingRight="10dp"
         android:src="@android:drawable/ic_menu_my_calendar" />
 </LinearLayout>

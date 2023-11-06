@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -16,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MimeTypes;
 import androidx.media3.exoplayer.ExoPlayer;
-import androidx.media3.exoplayer.SimpleExoPlayer;
 import androidx.media3.ui.PlayerView;
 
 import com.example.fitnessapp.db.classes.Exercicio;
@@ -86,9 +86,9 @@ public class Treinos extends AppCompatActivity {
 
     private void setupExoPlayerRow(PlayerView videoView, Uri videoUri) {
         ExoPlayer player = new ExoPlayer.Builder(this).build();
-        players.add(player); // Adicione o ExoPlayer à lista
+        players.add(player); 
         videoView.setPlayer(player);
-
+        
         MediaItem mediaItem = new MediaItem.Builder()
                 .setUri(videoUri)
                 .setMimeType(MimeTypes.APPLICATION_MP4)
@@ -104,6 +104,9 @@ public class Treinos extends AppCompatActivity {
         String description = exercicio.getDescricao();
 
         PlayerView videoView = layout.findViewById(R.id.exerc_rowIlustracao_video);
+        videoView.setLayoutParams(new FrameLayout.LayoutParams(
+                FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT
+        ));
         TextView titulo = layout.findViewById(R.id.exerc_rowTitulo);
         titulo.setText(title);
         TextView descricao = layout.findViewById(R.id.exerc_rowTexto);

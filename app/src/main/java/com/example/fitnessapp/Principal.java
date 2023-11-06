@@ -6,9 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -95,6 +95,10 @@ public class Principal extends AppCompatActivity {
 
         txtProgressDate.setText( LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) );
         txtProgress.setText("AINDA NÃO CONCLUIDO");
+
+        ProgressBar progressBar = findViewById(R.id.Principal_progressBar);
+        progressBar.setIndeterminate(false);
+        progressBar.setProgress(40);
 
         defbottomnavbar(R.id.principal_nav_item1, R.drawable.icontreino,  "Meus Treinos", Treinos.class);
         defbottomnavbar(R.id.principal_nav_item2, R.drawable.iconeatividade, "Minhas Atividades", Atividades.class);
